@@ -17,7 +17,7 @@ class Header extends Component {
 
     handleUserClick(e) {
         e.preventDefault()
-        this.props.dispatch(authActions.logout())
+        authActions.loginWithGoogle();
     }
 
     handleMouseOver(e) {
