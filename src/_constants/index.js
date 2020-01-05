@@ -1,4 +1,5 @@
 export * from './auth.constants'
+export * from './delivery.constants'
 
 
 export const COLORS = {
@@ -15,6 +16,6 @@ export const COLORS = {
 }
 
 export const CONFIG = {
-    API_BASE: process.env.REACT_APP_BASE_URL || 'https://api.visteoncloud.com',
+    API_BASE: process.env.REACT_APP_BASE_URL || 'http://localhost:3000',
 }
 
