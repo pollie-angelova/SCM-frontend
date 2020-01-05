@@ -1,47 +1,52 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Image } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import './Header.less'
 import { authActions } from '../_actions/auth.actions'
 
+const HOVER_TIME = 500;
+
 class Header extends Component {
-    state = {}
+    state = {
+        hoveredElement: null
+    }
+
+    hoverIntentTimeout = null;
 
     handleUserClick(e) {
         e.preventDefault()
         this.props.dispatch(authActions.logout())
     }
 
+    handleMouseOver(e) {
+        clearTimeout(this.hoverIntentTimeout);
+        this.setState({ hoveredElement: e.currentTarget.id });
+    }
+
+    handleMouseOut(e) {
+        this.hoverIntentTimeout = setTimeout(() => {
+            this.setState({ hoveredElement: null });
+            this.hoverIntentTimeout = null;
+        }, HOVER_TIME);
+        
+    }
+
     render() {
 
         return (
-            //     <header className='header'>
-            //         <NavLink to = '/'><Image className = 'logo' src='/images/visteon_wordmark_orange.png' /></NavLink>
-            //         <a href='#' onClick={this.handleUserClick.bind(this)}><Image className = 'user' src= '/images/user_icon.png'/></a>
-            //         <ul className='mainMenu'>
-            //             <li><NavLink to='/about'>About</NavLink></li>
-            //             <li>
-            //                 <NavLink to='/services'>Services</NavLink>
-            //                 <ul className='subMenu'>
-            //                     <li><NavLink to='/services/sso'>Single Sign-On (SSO)</NavLink></li>
-            //                     <li><NavLink to='/services/ota'>Over the Air (OTA)</NavLink></li>
-            //                     <li><NavLink to='/services/appStore'>Application Store</NavLink></li>
-            //                 </ul>
-            //             </li>
-            //             <li><NavLink to = '/solutions'>Solutions</NavLink></li>
-            //             <li><NavLink to = '/case_studies'>Case Studies</NavLink></li>
-            //             <li><NavLink to = '/contacts'>Contacts</NavLink></li>
-            //         </ul>
-            //     </header>
-
             <header className='header'>
 
-                <a href='#' onClick={this.handleUserClick.bind(this)}><Image className='user' src='/images/user_icon.png' /></a>
-                <ul className='mainMenu'>
+                <div id="logo">
+                    <NavLink to='/'><Icon name='dropbox' size="huge" link /></NavLink>
+                </div>
 
-                    <li><NavLink to='/services'>Services</NavLink>
+                <ul className='mainMenu'>
+                    <li id='services'
+                        className={this.state.hoveredElement === 'services' ? 'hover' : ''}
+                        onMouseOver={this.handleMouseOver.bind(this)} 
+                        onMouseOut={this.handleMouseOut.bind(this)}><NavLink to='/services'>Services</NavLink>
                         <ul className='subMenu'>
                             <li><NavLink to='/services/in_BG'>In Bulgaria</NavLink></li>
                             <li><NavLink to='/services/abroud'>Services Abroad</NavLink></li>
@@ -51,7 +56,10 @@ class Header extends Component {
                     <li><NavLink to='/track_order'>Track Order</NavLink></li>
                     <li><NavLink to='/my_account'>My Account</NavLink></li>
 
-                    <li><NavLink to='/support'>Support</NavLink>
+                    <li id='support'
+                        className={this.state.hoveredElement === 'support' ? 'hover' : ''}
+                        onMouseOver={this.handleMouseOver.bind(this)} 
+                        onMouseOut={this.handleMouseOut.bind(this)}><NavLink to='/support'>Support</NavLink>
                         <ul className='subMenu'>
                             <li><NavLink to='/support/about_us'>About Us</NavLink></li>
                             <li><NavLink to='/support/offices'>Offices</NavLink></li>
@@ -60,6 +68,9 @@ class Header extends Component {
                         </ul>
                     </li>
                 </ul>
+
+                <Icon id='user' name='user' size="big" link onClick={this.handleUserClick.bind(this)} />
+
             </header>
 
         )
