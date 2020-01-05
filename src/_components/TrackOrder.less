@@ -1,31 +1,32 @@
 @import '../_variables';
 
- 
-
-.background{
-   
-    background:url(/images/track_order.jpg) no-repeat ;
-    height: 700px;
-    
-    
-}
-
-// .ui.input.track{
-//     margin-left: 100px;;
-// }
-
-div.ui.container.neshto{
-    opacity: 0.9;
-    height: 100px;
-    background-color: white;
-    padding-top: 50px;
-
-}
-
-h2.nadpis{
-    font-size: 30px;
+.top-background {
+    background: url(/images/track_order.jpg) no-repeat;
+    height    : 700px;
     padding-top: 120px;
-    color: brown;
-    font-weight: bold;
-    text-align: center;
+}
+
+div.ui.container.top-container {
+    background-color: rgba(255, 255, 255, .9);
+    padding: 40px 0;
+
+    h2 {
+        font-size  : 30px;
+        color      : brown;
+        font-weight: bold;
+        text-align : center;
+    }
+
+    .ui.input {
+        line-height: 40px;
+        height: 60px;
+        width: 400px;
+        font-size: 25px;
+    }
+
+    .ui.form {
+        width: 450px;
+        margin: 0 auto;
+    }
+    
 }
