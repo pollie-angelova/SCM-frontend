@@ -57,7 +57,7 @@ const GridColumnsFooter = () => (
   <Grid className='footer-grid'>
     <Grid.Row>
       <Grid.Column width={6}>
-        <Image className='logo-footer' fluid size='medium' src='/images/Visteon_wordmark_white.png' />
+        <Image className='logo-footer' size='medium' src='/images/Visteon_wordmark_white.png' />
       </Grid.Column>
       <Grid.Column width={2}>
         <ul>
@@ -82,7 +82,7 @@ const GridColumnsFooter = () => (
       </Grid.Column>
       <Grid.Column width={2}>
         <ul>
-          <li><button class="ui icon button"><i aria-hidden="true" class="chevron up"></i></button></li>
+          <li><button className="ui icon button"><i aria-hidden="true" className="chevron up"></i></button></li>
         </ul>
       </Grid.Column>
     </Grid.Row>
