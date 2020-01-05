@@ -1,30 +1,32 @@
 import React from 'react'
-import { Container } from 'semantic-ui-react';
+import { Container, Input, Form } from 'semantic-ui-react';
 //import {Button} from '../_components';
 //import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import './TrackOrder.less'
 import './Input'
-import InputField from './Input';
 
 export class TrackOrderSection extends React.Component {
     render() {
         return (
-            <section className='background'>
-                <Container className = "neshto">
-                <h2 className='nadpis'>Enter Order ID</h2>
-                <InputField>
-                <div class="ui input track"><input type="text" placeholder="Search..." /></div>
-                </InputField>
+            <section className='top-background'>
+                <Container className="top-container">
+                    <h2>Enter Order ID</h2>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Group inline>
+                            <Form.Input placeholder='Search...' name='orderId' />
+                            <Form.Button content='Track' />
+                        </Form.Group>
+                    </Form>
                 </Container>
-                </section>
+            </section>
         )
 
     }
 }
 
 TrackOrderSection.propTypes = {
-   // showButton: PropTypes.bool
+    // showButton: PropTypes.bool
 };
 
 function mapStateToProps(state) {
