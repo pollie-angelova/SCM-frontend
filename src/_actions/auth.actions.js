@@ -3,15 +3,16 @@ import { authService } from '../_services'
 import { history } from '../_helpers'
 
 export const authActions = {
-    login,
+    loginWithGoogle,
     logout,
 }
 
-function login(username, password) {
+function loginWithGoogle() {
+    window.location = "https://google....";
     return async dispatch => {
         try {
             dispatch(request())
-            const user = await authService.login({ username, password })
+            const user = await authService.login()
             dispatch(success(user))
             history.push('/')
         } catch (err) {
