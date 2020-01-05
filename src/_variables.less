@@ -1,0 +1,105 @@
+@vst_gray:           #cccccc;
+@vst_light_blue:     #2684AD;
+@vst_blue:           #0B699A;
+@vst_dark_blue:      #0C3D60;
+@vst_orange:         #E57200;
+@vst_light_orange:   #FBA51A;
+@vst_beige:          #E5D5BE;
+@vst_light_green:    #90BDC2;
+@vst_white:          #ffffff;
+@vst_text_blue:      #003366;
+@vst_header:         #33626E;
+@vst_subheader:      #7D9EAD;
+@vst_footer:         #99cccc;
+@vst_content_divider:#339999;
+
+@delivery_header_red:  #b30000;
+@delivery_white: #ffffff;
+@delivery_footer_gray: #808080;
+@delivery_dark_gray: rgb(61, 67, 71);
+@delivery_black: #000000;
+
+.mixin-section-header {
+    text-align: center;
+    color: @delivery_header_red;
+    font-size: 40px;
+    margin-bottom: 60px;
+    font-weight: bold;
+}
+
+.mixin-section-divider {
+    text-align: center;
+    color: @vst_white;
+    font-size: 50px;
+    font-weight: normal;
+}
+
+.mixin-our-content{
+    max-width: 1920px;
+    height: 1000px;
+    text-align: center;
+    font-size: 30pt;
+    line-height: 40pt;
+    color: @vst_white;
+    padding-left: 20%;
+    padding-right: 15%;
+}
+
+.mixin-text-content{
+    padding-bottom: 80px;
+    font-size: 35px;
+    margin-right: 65px;
+    margin-left: 65px;
+}
+
+.mixin-subheader{
+    color:@vst_light_orange;
+    font-size: 40px;
+    text-align: left;
+    margin-left: 63px;
+    padding-top: 80px;
+    padding-bottom: 30px;
+}
+
+.mixin-content-style{
+
+    div.contents {
+
+        section {
+            ul {
+                margin: 0 75px;
+                margin-top: 30px;
+            }
+            li {
+                list-style: none;
+                position: relative;
+                margin-bottom: 15px;
+                line-height: normal;
+                margin-bottom: 30px;
+                &:before {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    background: orange;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 10px;
+                    left: -35px;
+                    top: 12px;
+                }
+            }
+        }
+
+        section:nth-child(2n){
+            background: rgba(204, 204,204, 0.3);
+            width:100%;
+        }
+    } 
+
+    
+}
+//.mixin-button {
+
+//}
+
+
