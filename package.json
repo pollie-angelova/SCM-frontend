@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=8080 craco start",
+    "start": "cross-env PORT=8080 craco start",
     "build": "craco build",
     "test": "craco test"
   },
