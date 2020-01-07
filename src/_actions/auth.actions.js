@@ -1,5 +1,4 @@
 import { authConstants } from '../_constants'
-import { authService } from '../_services'
 import { history } from '../_helpers'
 
 export const authActions = {
@@ -8,11 +7,21 @@ export const authActions = {
     logout,
 }
 
-function handleToken(history) {
-    if (window.location.hash.startsWith('#/token?token='));
-    const token = window.location.hash.replace('#/token?token=', '');
-    localStorage.setItem('token', token);
-    history.push('/');
+function handleToken() {
+    if (window.location.hash.startsWith('#/token?token=')) {
+        const token = window.location.hash.replace('#/token?token=', '');
+        localStorage.setItem('token', token);
+        history.push('/');
+        const encodedValue = token.split('.')[1];
+        const parsedValue = JSON.parse(atob(encodedValue));
+        return { type: authConstants.LOGIN, user: parsedValue }
+    }
+    return { type: authConstants.PASS }
+}
+
+function logout() {
+    localStorage.removeItem('token')
+    return { type: authConstants.LOGOUT }
 }
 
 function loginWithGoogle() {
@@ -28,10 +37,4 @@ function loginWithGoogle() {
         state: Math.round(Math.random() * 10000000),
     })
     window.location = `${OAUTH_URL}?${params.toString()}`;
-}
-
-function logout() {
-    authService.logout()
-    history.push('/login')
-    return { type: authConstants.LOGOUT }
 }
