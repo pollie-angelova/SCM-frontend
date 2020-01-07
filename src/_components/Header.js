@@ -15,9 +15,14 @@ class Header extends Component {
 
     hoverIntentTimeout = null;
 
-    handleUserClick(e) {
+    handleLogin(e) {
         e.preventDefault()
         authActions.loginWithGoogle();
+    }
+
+    handleLogout(e) {
+        e.preventDefault()
+        this.props.dispatch(authActions.logout());
     }
 
     handleMouseOver(e) {
@@ -69,7 +74,8 @@ class Header extends Component {
                     </li>
                 </ul>
 
-                <Icon id='user' name='user' size="big" link onClick={this.handleUserClick.bind(this)} />
+                { this.props.auth.user && <Icon id='user' name='user' size="big" link onClick={this.handleLogout.bind(this)} /> }
+                { !this.props.auth.user && <Icon id='user' name='google' size="big" link onClick={this.handleLogin.bind(this)} /> }
 
             </header>
 
@@ -82,7 +88,9 @@ Header.propTypes = {
 }
 
 function mapStateToProps(state) {
-    return {}
+    return {
+        auth: state.auth
+    }
 }
 
 const connectedHeader = connect(mapStateToProps)(Header)

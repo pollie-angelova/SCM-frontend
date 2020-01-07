@@ -1,7 +1,11 @@
 import { authConstants } from '../_constants'
 
-let user = JSON.parse(localStorage.getItem('user'))
-const initialState = user ? { loading: false, user } : { loading: false, user: null }
+let user = null
+if (localStorage.getItem('token')) {
+    const encodedValue = localStorage.getItem('token').split('.')[1];
+    user = JSON.parse(atob(encodedValue));
+}
+const initialState = { loading: false, user }
 
 /**
  * {
@@ -33,7 +37,13 @@ export function auth(state = initialState, action) {
                 loading: false,
             }
 
-
+        case authConstants.LOGIN:
+            return {
+                ...state,
+                user: action.user,
+                loading: false,
+            }
+        
         case authConstants.LOGOUT:
             return {
                 ...state,
