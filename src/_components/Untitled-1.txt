@@ -1,0 +1,20 @@
+
+UI (14 days)
+===============================
+- Services (one service per endpoint group)
+- Action Creators
+- Common UI components
+- Page components
+- Authentication component
+- Reducers
+
+
+- Login Page - Login with Google
+             - Create auth actions
+- My Account
+- Track Order
+- Services
+    - Create Order
+    - Calculator
+- Calculator Page
+- Order Management page (Admin)
