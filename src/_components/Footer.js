@@ -1,7 +1,8 @@
 import React from 'react'
-import { Grid, Image } from 'semantic-ui-react'
+import { Grid, Icon } from 'semantic-ui-react'
+import { NavLink } from 'react-router-dom'
+import {TinyButton as ScrollUpButton} from "react-scroll-up-button";
 import './Footer.less'
-
 
 export class Footer extends React.Component {
   render() {
@@ -13,51 +14,11 @@ export class Footer extends React.Component {
   }
 }
 
-// const GridColumnsFooter = () => (
-//   <Grid className='footer-grid'>
-//     <Grid.Row>
-//       <Grid.Column width={7}>
-//         <Image className='logo-footer' fluid size='medium' src='/images/Visteon_wordmark_white.png' />
-//       </Grid.Column>
-//       <Grid.Column width={3}>
-//         <ul>
-//           <li className='h2-column'>Services
-//             <ul>
-//               <li className='h3-column'>Single Sign-on</li>
-//               <li className='h3-column'>Over the Air</li>
-//               <li className='h3-column'>Application Store</li>
-//             </ul>
-//           </li>
-//         </ul>
-
-//       </Grid.Column>
-//       <Grid.Column width={3}>
-//         <ul>
-//           <li>
-//             Solutions
-//               <ul>
-//               <li>Telemetry</li>
-//               <li>Updatability</li>
-//               <li>Cognitive Services</li>
-//             </ul>
-//           </li>
-//         </ul>
-//       </Grid.Column>
-//       <Grid.Column width={3}>
-//         <ul>
-//           <li className="h2-column-last"> Contacts</li>
-//           <li className="h2-column-last"> MyVisteonProfile</li>
-//         </ul>
-//       </Grid.Column>
-//     </Grid.Row>
-//   </Grid>
-
-
 const GridColumnsFooter = () => (
   <Grid className='footer-grid'>
     <Grid.Row>
-      <Grid.Column width={6}>
-        <Image className='logo-footer' size='medium' src='/images/Visteon_wordmark_white.png' />
+      <Grid.Column width={5}>
+      <NavLink to='/'><Icon id ="logo-footer" name='dropbox' size="massive"  link /></NavLink>
       </Grid.Column>
       <Grid.Column width={2}>
         <ul>
@@ -82,7 +43,8 @@ const GridColumnsFooter = () => (
       </Grid.Column>
       <Grid.Column width={2}>
         <ul>
-          <li><button className="ui icon button"><i aria-hidden="true" className="chevron up"></i></button></li>
+          <li><ScrollUpButton style = {{"fill": "rgb(255,255,255)"}}/></li>
+          {/* <li><button className="ui icon button"><i aria-hidden="true" className="chevron up"></i></button></li> */}
         </ul>
       </Grid.Column>
     </Grid.Row>

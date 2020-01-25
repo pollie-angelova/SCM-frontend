@@ -47,5 +47,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "google-distance-matrix": "^1.1.1",
+    "google-maps-react": "^2.0.2",
+    "react-scroll-up-button": "^1.6.4"
   }
 }
