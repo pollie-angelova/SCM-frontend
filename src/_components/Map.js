@@ -47,68 +47,27 @@
 // // }
 
 // export default Map;
-import React, { Component } from 'react';
-import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
 
-const mapStyles = {
-    width: '100%',
-    height: '100%',
-    position: 'relative'
-  };
+import React from 'react';
+import GoogleMapReact from 'google-map-react';
 
-export class MapContainer extends Component {
+export class MapContainer extends React.Component {
 
-    state = {
-        showingInfoWindow: false,  //Hides or the shows the infoWindow
-        activeMarker: {},          //Shows the active marker upon click
-        selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
-      };
-
-      onMarkerClick = (props, marker, e) =>
-      this.setState({
-        selectedPlace: props,
-        activeMarker: marker,
-        showingInfoWindow: true
-      });
-  
-    onClose = props => {
-      if (this.state.showingInfoWindow) {
-        this.setState({
-          showingInfoWindow: false,
-          activeMarker: null
-        });
-      }
+    static defaultProps = {
+        center: {
+            lat: 42.6882482,
+            lng: 23.34457
+        },
+        zoom: 18
     };
 
     render() {
         return (
-            <Map
-                google={this.props.google}
-                zoom={14}
-                style={mapStyles}
-                initialCenter={{
-                    lat: -1.2884,
-                    lng: 36.8233
-                }}
-            >
-                <Marker
-          onClick={this.onMarkerClick}
-          name={'Kenyatta International Convention Centre'}
-        />
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.onClose}
-        >
-          <div>
-            <h4>{this.state.selectedPlace.name}</h4>
-          </div>
-        </InfoWindow>
-            </Map>
+            <GoogleMapReact
+                bootstrapURLKeys={{ key: 'AIzaSyCXMiOHzz13PmiVlqXo34pYsi6hBrT98vY' }}
+                defaultCenter={this.props.center}
+                defaultZoom={this.props.zoom}>
+            </GoogleMapReact>
         );
     }
 }
-
-export default GoogleApiWrapper({
-    apiKey: "AIzaSyCXMiOHzz13PmiVlqXo34pYsi6hBrT98vY"
-  })(MapContainer);
