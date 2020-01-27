@@ -1,7 +1,5 @@
 import React from 'react'
 import { Container, Form } from 'semantic-ui-react';
-//import {Button} from '../_components';
-//import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import './TrackOrder.less'
 import './Input'
