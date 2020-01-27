@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom'
+import { Icon, Button } from 'semantic-ui-react'
+import { NavLink} from 'react-router-dom'
 import { connect } from 'react-redux'
+import {history} from '../_helpers/history'
 import './Header.less'
 import { authActions } from '../_actions/auth.actions'
 
@@ -38,6 +39,11 @@ class Header extends Component {
         
     }
 
+    handleClick(){
+        //return <Redirect to="/services/delivery_calculator"  />
+        history.push('/delivery_calculator')
+    }
+
     render() {
 
         return (
@@ -55,7 +61,6 @@ class Header extends Component {
                         <ul className='subMenu'>
                             <li><NavLink to='/services/in_BG'>In Bulgaria</NavLink></li>
                             <li><NavLink to='/services/abroud'>Services Abroad</NavLink></li>
-                            <li><NavLink to='/services/delivery_calculator'>Delivery Calculator</NavLink></li>
                         </ul>
                     </li>
                     <li><NavLink to='/track_order'>Track Order</NavLink></li>
@@ -72,6 +77,7 @@ class Header extends Component {
                             <li><NavLink to='/support/contacts'>Contacts</NavLink></li>
                         </ul>
                     </li>
+                    <li><Button  className="ui primary button" onClick={this.handleClick} >Calculate Delivery</Button></li>
                 </ul>
 
                 { this.props.auth.user && <Icon id='user' name='user' size="big" link onClick={this.handleLogout.bind(this)} /> }

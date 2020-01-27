@@ -14,12 +14,13 @@ class CalculateDeliveryPage extends React.Component {
                 <Header />
                 <div className="calculate_form">
                     <Segment placeholder >
+                    <h2 > Delivery Calculator</h2>
                         <Grid columns={2} stretched>
                             <Grid.Column verticalAlign='middle' width={6}>
                                 <Form>
                                     <Form.Input label='Source Address:' />
                                     <Form.Input label='Destination Address:' />
-                                    <Button content='Calculate' primary />
+                                    <Button content='Calculate' />
                                 </Form>
                             </Grid.Column>
 
