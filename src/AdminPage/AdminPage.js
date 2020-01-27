@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Header, Page, Footer } from '../_components'
 import { authActions } from '../_actions/auth.actions'
-import { Table, Label, Container, Form, Button, Grid, GridColumn } from 'semantic-ui-react'
-import './MyAccountPage.less'
+import { Table, Label, Container } from 'semantic-ui-react'
+import './AdminPage.less'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
@@ -27,7 +27,7 @@ for (let i = 0; i < 10; i++) {
     })
 }
 
-class MyAccountPage extends React.Component {
+class AdminPage extends React.Component {
 
     componentDidMount() {
         this.props.dispatch(authActions.handleToken())
@@ -38,7 +38,9 @@ class MyAccountPage extends React.Component {
             <Table.Row>
                 <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
                 <Table.Cell>
-                    Sofia
+                    {delivery.source}
+                    <br />
+                    {delivery.sender}
                 </Table.Cell>
                 <Table.Cell>
                     {delivery.destination}
@@ -46,6 +48,9 @@ class MyAccountPage extends React.Component {
                     {delivery.recepient}
                 </Table.Cell>
                 <Table.Cell>{delivery.status}</Table.Cell>
+                <Table.Cell>
+                    <Link to='/'>Modify</Link>
+                </Table.Cell>
             </Table.Row>
         )
     }
@@ -55,30 +60,7 @@ class MyAccountPage extends React.Component {
             <Page clasName='page'>
                 <Header />
                 <Container className='admin_page'>
-                    <h2>My Account</h2>
-                    <Grid centered>
-                        <GridColumn width={8}>
-                            <Form>
-                                <Form.Field>
-                                    <label>Name</label>
-                                    <input placeholder='Polya Angelova' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Email</label>
-                                    <input placeholder='polya@scm.com' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Password</label>
-                                    <input type="password" placeholder='******' />
-                                </Form.Field>
-                                <div style={{ textAlign: 'center' }}>
-                                    <Button type='submit'>Save</Button>
-                                </div>
-                            </Form>
-                        </GridColumn>
-                    </Grid>
-                    <br />
-                    <br />
+                    <h2>Administration</h2>
                     <Table celled>
                         <Table.Header>
                             <Table.Row>
@@ -86,11 +68,12 @@ class MyAccountPage extends React.Component {
                                 <Table.HeaderCell>Source</Table.HeaderCell>
                                 <Table.HeaderCell>Destination</Table.HeaderCell>
                                 <Table.HeaderCell>Status</Table.HeaderCell>
+                                <Table.HeaderCell></Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
 
                         <Table.Body>
-                            {DELIVERIES.slice(0, 5).map(this.renderDelivery)}
+                            {DELIVERIES.map(this.renderDelivery)}
                         </Table.Body>
                     </Table>
                 </Container>
@@ -102,7 +85,7 @@ class MyAccountPage extends React.Component {
     }
 }
 
-MyAccountPage.propTypes = {
+AdminPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 }
 
@@ -112,5 +95,5 @@ function mapStateToProps(state) {
 }
 
 
-const connectedMyAccountPage = connect(mapStateToProps)(MyAccountPage)
-export { connectedMyAccountPage as MyAccountPage }
+const connectedAdminPage = connect(mapStateToProps)(AdminPage)
+export { connectedAdminPage as AdminPage }

@@ -5,9 +5,10 @@ import { Router, Route, Switch } from 'react-router-dom'
 import { HomePage } from './HomePage'
 import {TrackOrderPage} from './TrackOrderPage'
 import  {CalculateDeliveryPage} from './CalculateDeriveryPage'
-import {MyAccount} from './MyAccountPage'
+import {MyAccountPage} from './MyAccountPage'
 
 import { history } from './_helpers'
+import { AdminPage } from './AdminPage'
 
 class App extends Component {
 
@@ -23,9 +24,10 @@ class App extends Component {
                 <div id='router'>
                     <Switch>
                         <Route exact path="/" component={HomePage} />
-                        <Route exact path= "/track_order" component={TrackOrderPage}/>  
+                        <Route exact path= "/track_order" component={TrackOrderPage}/>
                         <Route exact path ="/delivery_calculator" component= {CalculateDeliveryPage}/>
-                        <Route exact path = "/my_account" component={MyAccount} />
+                        <Route exact path = "/my_account" component={MyAccountPage} />
+                        <Route exact path = "/admin" component={AdminPage} />
                         {/*<Route exact path="/login" component={LoginPage} />
                         <PrivateRoute exact path="/contacts" component={ContactsPage} />
                         <PrivateRoute exact path="/about" component={AboutPage} />
