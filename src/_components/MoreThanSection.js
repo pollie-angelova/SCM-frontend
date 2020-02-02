@@ -9,19 +9,6 @@ export class MoreThanSection extends React.Component {
         return (
             <section className="more_section">
                 <h2>More than Shipping</h2>
-                {/* <Grid columns='three' >
-                <Grid.Row>
-                    <Grid.Column>
-                        <Image className = "in_grid first" src='/images/moving.jpg' />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Image className = "in_grid" src='/images/second.jpg' />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Image className = "in_grid" src='/images/third.jpg' />
-                    </Grid.Column>
-                </Grid.Row>
-                </Grid> */}
 
                 <Grid container columns={3}>
                     <Grid.Column verticalAlign='middle' textAlign='center'>
