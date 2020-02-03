@@ -7,6 +7,7 @@ import { Header, Page, Footer } from '../_components'
 import { MapContainer } from '../_components'
 import { Dropdown } from 'semantic-ui-react'
 import './CalculateDeliveryPage.less'
+import { deliveryActions } from '../_actions/delivery.actions'
 
 const options = [
     { key: 1, text: 'Sofia', value:[42.698334, 23.319941] },
@@ -18,17 +19,41 @@ const options = [
 
 class CalculateDeliveryPage extends React.Component {
 
-    handleChange(){
-       // $('#source-dd').dropdown('get text');
+    state = {
+        selectedSource: null,
+        selectedDestination: null,
+    }
+
+    componentDidMount() {
+        this.props.dispatch(deliveryActions.getAvailableSources());
+        this.props.dispatch(deliveryActions.getAvailableDestinations());
+    }
+
+    availableSourcesOptions() {
+        return this.props.availableSources.map(source => ({
+            key: source.id,
+            text: source.name,
+            value: source.coordinates.join(','),
+        }))
+    }
+
+    availableDestinationsOptions() {
+        return this.props.availableDestinations.map(dest => ({
+            key: dest.id,
+            text: dest.name,
+            value: dest.coordinates.join(','),
+        }))
     }
 
     handleClick() {
 
-        const map = new window.google.maps.Map(document.getElementById('map'), {
-            zoom: 6
-        });
+        if (this.state.selectedSource && this.state.selectedDestination) {
 
-        var directionsService = new window.google.maps.DirectionsService();
+            const map = new window.google.maps.Map(document.getElementById('map'), {
+                zoom: 6
+            });
+
+            var directionsService = new window.google.maps.DirectionsService();
             var directionsRenderer = new window.google.maps.DirectionsRenderer();
 
             const source = new window.google.maps.LatLng( 42.510578, 27.461014 );
@@ -47,11 +72,23 @@ class CalculateDeliveryPage extends React.Component {
                     directionsRenderer.setDirections(result);
                 }else {
                     window.alert('Directions request failed due to ' + status);
-                  }
+                    }
             });
 
             directionsRenderer.setMap(map);
 
+        }
+
+    }
+
+    onSourceChange(e, data) {
+        const [lat, lon] = data.value.split(',');
+        this.setState({ selectedSource: {lat, lon} });
+    }
+
+    onDestinationChange(e, data) {
+        const [lat, lon] = data.value.split(',');
+        this.setState({ selectedDestination: {lat, lon} });
     }
 
     render() {
@@ -63,17 +100,26 @@ class CalculateDeliveryPage extends React.Component {
                         <h2 > Delivery Calculator</h2>
                         <Grid columns={2} stretched>
                             <Grid.Column verticalAlign='middle' width={6}>
-                                <h4> Source:</h4>
-                                <Dropdown id ="source-dd" clearable options={options} selection onChange={this.handleChange} />
-                                <h4> Destination:</h4>
-                                <Dropdown id='destination-dd' clearable options={options} selection />
-                                <br/>
-                                <Button content='Calculate' onClick={this.handleClick} />
+                                <Form>
+                                    <Form.Dropdown placeholder='Select address'
+                                        fluid
+                                        selection
+                                        options={this.availableSourcesOptions()}
+                                        onChange={this.onSourceChange.bind(this)}
+                                        label='Source Address:' />
+                                    <Form.Dropdown placeholder='Select address'
+                                        fluid
+                                        selection
+                                        options={this.availableDestinationsOptions()}
+                                        onChange={this.onDestinationChange.bind(this)}
+                                        label='Destination Address:' />
+                                    <Button content='Calculate' onClick={this.onCalculate.bind(this)} />
+                                </Form>
                             </Grid.Column>
 
                             <Grid.Column verticalAlign='middle' width={10}>
                                 <div className='calculate_map'>
-                                    <MapContainer />
+                                    <MapContainer selectedSource />
                                 </div>
                             </Grid.Column>
                         </Grid>
@@ -90,7 +136,11 @@ CalculateDeliveryPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-    return {}
+    const { availableSources, availableDestinations } = state.delivery;
+    return {
+        availableSources,
+        availableDestinations
+    }
 }
 
 
