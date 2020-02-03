@@ -16,7 +16,6 @@ const options = [
     { key: 4, text: 'Burgas', value: [42.510578, 27.461014] },
 ]
 
-
 class CalculateDeliveryPage extends React.Component {
 
     state = {
