@@ -10,6 +10,8 @@ import { deliveryActions } from '../_actions/delivery.actions'
 
 class CalculateDeliveryPage extends React.Component {
 
+    map = null;
+
     state = {
         selectedSource: null,
         selectedDestination: null,
@@ -18,6 +20,10 @@ class CalculateDeliveryPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(deliveryActions.getAvailableSources());
         this.props.dispatch(deliveryActions.getAvailableDestinations());
+    }
+
+    setMapReference(element) {
+        this.map = element;
     }
 
     availableSourcesOptions() {
@@ -40,7 +46,7 @@ class CalculateDeliveryPage extends React.Component {
 
         if (this.state.selectedSource && this.state.selectedDestination) {
 
-            const map = new window.google.maps.Map(document.getElementById('map'), {
+            const map = new window.google.maps.Map(this.map, {
                 zoom: 6
             });
 
@@ -108,7 +114,7 @@ class CalculateDeliveryPage extends React.Component {
 
                             <Grid.Column verticalAlign='middle' width={10}>
                                 <div className='calculate_map'>
-                                    <MapContainer selectedSource />
+                                    <MapContainer mapReference={this.setMapReference.bind(this)} />
                                 </div>
                             </Grid.Column>
                         </Grid>
