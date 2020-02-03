@@ -31,12 +31,10 @@ export class MapContainer extends React.Component {
         return this.googleMapsPromise;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // Start Google Maps API loading since we know we'll soon need it
         this.getGoogleMaps();
-    }
 
-    componentDidMount() {
         // Once the Google Maps API has finished loading, initialize the map
         this.getGoogleMaps().then((google) => {
 
