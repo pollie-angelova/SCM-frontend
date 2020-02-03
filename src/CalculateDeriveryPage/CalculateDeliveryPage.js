@@ -2,19 +2,11 @@ import React from 'react'
 import axios from 'axios';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Button, Grid, Segment } from 'semantic-ui-react'
+import { Button, Grid, Segment, Form } from 'semantic-ui-react'
 import { Header, Page, Footer } from '../_components'
 import { MapContainer } from '../_components'
-import { Dropdown } from 'semantic-ui-react'
 import './CalculateDeliveryPage.less'
 import { deliveryActions } from '../_actions/delivery.actions'
-
-const options = [
-    { key: 1, text: 'Sofia', value:[42.698334, 23.319941] },
-    { key: 2, text: 'Plovdiv', value: [42.136097, 24.742168] },
-    { key: 3, text: 'Varna', value: [43.204666, 27.910543] },
-    { key: 4, text: 'Burgas', value: [42.510578, 27.461014] },
-]
 
 class CalculateDeliveryPage extends React.Component {
 
@@ -52,26 +44,26 @@ class CalculateDeliveryPage extends React.Component {
                 zoom: 6
             });
 
-            var directionsService = new window.google.maps.DirectionsService();
-            var directionsRenderer = new window.google.maps.DirectionsRenderer();
+            const directionsService = new window.google.maps.DirectionsService();
+            const directionsRenderer = new window.google.maps.DirectionsRenderer();
+            const [sourceLat, sourceLon] = this.state.selectedSource;
+            const [destLat, destLon] = this.state.selectedDestination;
 
-            const source = new window.google.maps.LatLng( 42.510578, 27.461014 );
-            const destination = new window.google.maps.LatLng( 43.204666, 27.910543);
+            const source = new window.google.maps.LatLng(sourceLat, sourceLon);
+            const destination = new window.google.maps.LatLng(destLat, destLon);
 
-
-            var request = {
+            const request = {
                 origin: source,
-                destination:  destination,
+                destination: destination,
                 travelMode: window.google.maps.TravelMode['DRIVING']
             };
-
 
             directionsService.route(request, function (result, status) {
                 if (status === 'OK') {
                     directionsRenderer.setDirections(result);
-                }else {
-                    window.alert('Directions request failed due to ' + status);
-                    }
+                } else {
+                    console.error(`Directions request failed due to ${status}`);
+                }
             });
 
             directionsRenderer.setMap(map);
@@ -81,13 +73,11 @@ class CalculateDeliveryPage extends React.Component {
     }
 
     onSourceChange(e, data) {
-        const [lat, lon] = data.value.split(',');
-        this.setState({ selectedSource: {lat, lon} });
+        this.setState({ selectedSource: data.value.split(',') });
     }
 
     onDestinationChange(e, data) {
-        const [lat, lon] = data.value.split(',');
-        this.setState({ selectedDestination: {lat, lon} });
+        this.setState({ selectedDestination: data.value.split(',') });
     }
 
     render() {
@@ -112,7 +102,7 @@ class CalculateDeliveryPage extends React.Component {
                                         options={this.availableDestinationsOptions()}
                                         onChange={this.onDestinationChange.bind(this)}
                                         label='Destination Address:' />
-                                    <Button content='Calculate' onClick={this.onCalculate.bind(this)} />
+                                    <Button content='Calculate' onClick={this.handleClick.bind(this)} />
                                 </Form>
                             </Grid.Column>
 
