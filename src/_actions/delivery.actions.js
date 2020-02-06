@@ -6,6 +6,8 @@ export const deliveryActions = {
     trackDelivery,
     getAvailableSources,
     getAvailableDestinations,
+    getDeliveryPrice,
+    getTransitDuration,
 }
 
 /**
@@ -18,12 +20,12 @@ function trackDelivery(deliveryId) {
 
         // perform async operation
         deliveryService.trackDelivery(deliveryId)
-        .then(delivery => {
-            dispatch(success(delivery))
-        })
-        .catch(error => {
-            dispatch(failure(error))
-        })
+            .then(delivery => {
+                dispatch(success(delivery))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
     }
 
     function request() { return { type: deliveryConstants.TRACK_REQUEST } }
@@ -41,12 +43,12 @@ function getAvailableSources() {
 
         // perform async operation
         deliveryService.getAvailableSources()
-        .then(result => {
-            dispatch(success(result))
-        })
-        .catch(error => {
-            dispatch(failure(error))
-        })
+            .then(result => {
+                dispatch(success(result))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
     }
 
     function request() { return { type: deliveryConstants.AVAILABLE_SOURCES_REQUEST } }
@@ -64,15 +66,63 @@ function getAvailableDestinations() {
 
         // perform async operation
         deliveryService.getAvailableDestinations()
-        .then(result => {
-            dispatch(success(result))
-        })
-        .catch(error => {
-            dispatch(failure(error))
-        })
+            .then(result => {
+                dispatch(success(result))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
     }
 
     function request() { return { type: deliveryConstants.AVAILABLE_DESTINATIONS_REQUEST } }
     function success(destinations) { return { type: deliveryConstants.AVAILABLE_DESTINATIONS_SUCCESS, destinations } }
     function failure(error) { return { type: deliveryConstants.AVAILABLE_DESTINATIONS_FAILURE, error } }
 }
+
+
+/**
+ * Get delivery transit price 
+ * @return {Function}
+ */
+function getDeliveryPrice() {
+    return dispatch => {
+        dispatch(request())
+
+        // perform async operation
+        deliveryService.getDeliveryPrice()
+            .then(result => {
+                dispatch(success(result))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
+    }
+
+    function request() { return { type: deliveryConstants.DELIVERY_PRICE_REQUEST } }
+    function success(price) { return { type: deliveryConstants.DELIVERY_PRICE_SUCCESS, price } }
+    function failure(error) { return { type: deliveryConstants.DELIVERY_PRICE_FAILURE, error } }
+}
+
+/**
+ * Get delivery transit duration
+ * @return {Function}
+ */
+function getTransitDuration() {
+    return dispatch => {
+        dispatch(request())
+
+        // perform async operation
+        deliveryService.getTransitDuration()
+            .then(result => {
+                dispatch(success(result))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
+    }
+
+    function request() { return { type: deliveryConstants.DELIVERY_TRANSIT_DURATION_REQUEST } }
+    function success(duration) { return { type: deliveryConstants.DELIVERY_TRANSIT_DURATION_SUCCESS, duration } }
+    function failure(error) { return { type: deliveryConstants.DELIVERY_TRANSIT_DURATION_FAILURE, error } }
+}
+

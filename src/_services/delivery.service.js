@@ -7,6 +7,8 @@ export const deliveryService = {
     trackDelivery,
     getAvailableSources,
     getAvailableDestinations,
+    getDeliveryPrice,
+    getTransitDuration
 }
 
 async function trackDelivery(deliveryId) {
@@ -36,4 +38,12 @@ async function getAvailableDestinations() {
         { id: 5, name: 'Stara Zagora', coordinates: [42.43278, 25.64194] },
         { id: 6, name: 'Veliko Turnovo', coordinates: [43.08124, 25.62904] },
     ];
+}
+
+async function getDeliveryPrice() {
+    return {}
+}
+
+async function getTransitDuration() {
+    return {};
 }

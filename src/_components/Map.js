@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import './Map.less';
-//import GoogleMapReact from 'google-map-react';
 
 export class MapContainer extends React.Component {
 
@@ -50,29 +49,6 @@ export class MapContainer extends React.Component {
                 zoom: 6,
                 center: center
             });
-
-            // var directionsService = new google.maps.DirectionsService();
-            // var directionsRenderer = new google.maps.DirectionsRenderer();
-            // const source = new google.maps.LatLng( 42.510578, 27.461014 );
-            // const destination = new google.maps.LatLng( 43.204666, 27.910543);
-
-
-            // var request = {
-            //     origin: source,
-            //     destination:  destination,
-            //     travelMode: google.maps.TravelMode['DRIVING']
-            // };
-
-
-            // directionsService.route(request, function (result, status) {
-            //     if (status === 'OK') {
-            //         directionsRenderer.setDirections(result);
-            //     }else {
-            //         window.alert('Directions request failed due to ' + status);
-            //       }
-            // });
-
-            // directionsRenderer.setMap(map);
 
         });
     };

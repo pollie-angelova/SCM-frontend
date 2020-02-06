@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Button, Grid, Segment, Form } from 'semantic-ui-react'
@@ -7,6 +6,7 @@ import { Header, Page, Footer } from '../_components'
 import { MapContainer } from '../_components'
 import './CalculateDeliveryPage.less'
 import { deliveryActions } from '../_actions/delivery.actions'
+//import { deliveryConstants } from '../_constants'
 
 class CalculateDeliveryPage extends React.Component {
 
@@ -15,11 +15,15 @@ class CalculateDeliveryPage extends React.Component {
     state = {
         selectedSource: null,
         selectedDestination: null,
+        price: 0,
+        duration: 0,
     }
 
     componentDidMount() {
         this.props.dispatch(deliveryActions.getAvailableSources());
         this.props.dispatch(deliveryActions.getAvailableDestinations());
+        this.props.dispatch(deliveryActions.getDeliveryPrice());
+        this.props.dispatch(deliveryActions.getTransitDuration());
     }
 
     setMapReference(element) {
@@ -72,58 +76,102 @@ class CalculateDeliveryPage extends React.Component {
                 }
             });
 
-            directionsRenderer.setMap(map);
+            var distanceMatrixService = new window.google.maps.DistanceMatrixService();
+            distanceMatrixService.getDistanceMatrix(
+                {
+                    origins: [source],
+                    destinations: [destination],
+                    travelMode: 'DRIVING',
+                    avoidHighways: false,
+                    avoidTolls: true,
+                }, calculateTransitDuration);
 
-        }
+            function calculateTransitDuration(response, status) {
+
+                if (status === 'OK') {
+
+                    var origins = response.originAddresses;
+                    var destinations = response.destinationAddresses;
+
+                    for (var i = 0; i < origins.length; i++) {
+                        var results = response.rows[i].elements;
+                        for (var j = 0; j < results.length; j++) {
+                            var element = results[j];
+                            var distance = element.distance.text;
+                            var duration = element.duration.text;
+                            var from = origins[i];
+                            var to = destinations[j];
+                        }
+                    }
+                } else {
+                    console.error(`Transit duration request failed due to ${status}`);
+                }
+
+                console.log(element.duration.value)
+                console.log(element.fare.value)
+
+                // return <div>
+                //     <h6>Transit duration: </h6>
+                //     <h6>Price: </h6>
+                //     </div>
+
+            }
+
+        directionsRenderer.setMap(map);
+
 
     }
 
-    onSourceChange(e, data) {
-        this.setState({ selectedSource: data.value.split(',') });
-    }
+}
 
-    onDestinationChange(e, data) {
-        this.setState({ selectedDestination: data.value.split(',') });
-    }
+onSourceChange(e, data) {
+    this.setState({ selectedSource: data.value.split(',') });
+}
 
-    render() {
-        return (
-            <Page clasName='page'>
-                <Header />
-                <div className="calculate_form">
-                    <Segment placeholder >
-                        <h2 > Delivery Calculator</h2>
-                        <Grid columns={2} stretched>
-                            <Grid.Column verticalAlign='middle' width={6}>
-                                <Form>
-                                    <Form.Dropdown placeholder='Select address'
-                                        fluid
-                                        selection
-                                        options={this.availableSourcesOptions()}
-                                        onChange={this.onSourceChange.bind(this)}
-                                        label='Source Address:' />
-                                    <Form.Dropdown placeholder='Select address'
-                                        fluid
-                                        selection
-                                        options={this.availableDestinationsOptions()}
-                                        onChange={this.onDestinationChange.bind(this)}
-                                        label='Destination Address:' />
-                                    <Button content='Calculate' onClick={this.handleClick.bind(this)} />
-                                </Form>
-                            </Grid.Column>
+onDestinationChange(e, data) {
+    this.setState({ selectedDestination: data.value.split(',') });
+}
 
-                            <Grid.Column verticalAlign='middle' width={10}>
-                                <div className='calculate_map'>
-                                    <MapContainer mapReference={this.setMapReference.bind(this)} />
-                                </div>
-                            </Grid.Column>
-                        </Grid>
-                    </Segment>
-                </div>
-                <Footer />
-            </Page>
-        )
-    }
+render() {
+    return (
+        <Page clasName='page'>
+            <Header />
+            <div className="calculate_form">
+                <Segment placeholder >
+                    <h2 > Delivery Calculator</h2>
+                    <Grid columns={2} stretched>
+                        <Grid.Column verticalAlign='middle' width={6}>
+                            <Form>
+                                <Form.Dropdown placeholder='Select address'
+                                    fluid
+                                    selection
+                                    options={this.availableSourcesOptions()}
+                                    onChange={this.onSourceChange.bind(this)}
+                                    label='Source Address:' />
+                                <Form.Dropdown placeholder='Select address'
+                                    fluid
+                                    selection
+                                    options={this.availableDestinationsOptions()}
+                                    onChange={this.onDestinationChange.bind(this)}
+                                    label='Destination Address:' />
+                                <Button content='Calculate' onClick={this.handleClick.bind(this)} />
+
+
+                            </Form>
+                        </Grid.Column>
+
+                        <Grid.Column verticalAlign='middle' width={10}>
+                            <div className='calculate_map'>
+                                <MapContainer mapReference={this.setMapReference.bind(this)} />
+                            </div>
+                        </Grid.Column>
+                    </Grid>
+                </Segment>
+            </div>
+            <Footer />
+        </Page>
+    )
+}
 }
 
 CalculateDeliveryPage.propTypes = {
