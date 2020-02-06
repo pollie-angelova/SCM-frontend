@@ -1,11 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import './Map.less';
 //import GoogleMapReact from 'google-map-react';
 
 export class MapContainer extends React.Component {
 
+    map = null;
+    googleMapsPromise = null;
 
     getGoogleMaps() {
+
+        if (window.google) {
+            return Promise.resolve(window.google);
+        }
+
         // If we haven't already defined the promise, define it
         if (!this.googleMapsPromise) {
             this.googleMapsPromise = new Promise((resolve) => {
@@ -31,18 +39,14 @@ export class MapContainer extends React.Component {
         return this.googleMapsPromise;
     }
 
-    componentWillMount() {
-        // Start Google Maps API loading since we know we'll soon need it
-        this.getGoogleMaps();
-    }
-
     componentDidMount() {
+
         // Once the Google Maps API has finished loading, initialize the map
         this.getGoogleMaps().then((google) => {
 
             const center = { lat: 42.698334, lng: 23.319941 }
 
-            const map = new window.google.maps.Map(document.getElementById('map'), {
+            const map = new window.google.maps.Map(this.map, {
                 zoom: 6,
                 center: center
             });
@@ -73,14 +77,25 @@ export class MapContainer extends React.Component {
         });
     };
 
+    setMapReference(element) {
+        this.map = element;
+        if (this.props.mapReference) {
+            this.props.mapReference(element);
+        }
+    }
+
     render() {
         return (
             <div>
-                <div id="map"  ></div>
+                <div id='map' ref={this.setMapReference.bind(this)} />
             </div>
         )
 
 
     }
 }
+
+MapContainer.propTypes = {
+    mapReference: PropTypes.func.isRequired
+};
 
