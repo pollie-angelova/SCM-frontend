@@ -6,7 +6,7 @@ const initialState = {
     availableSources: [],
     availableDestinations: [],
     price: 0,
-    transit_duration: 0
+    duration: 0
 }
 
 export function delivery(state = initialState, action) {
@@ -48,27 +48,17 @@ export function delivery(state = initialState, action) {
             return { ...state, loading: false, }
 
         case deliveryConstants.DELIVERY_PRICE_REQUEST:
-            return { ...state, price: 0 }
+            return { ...state, price: 0, duration: 0 }
 
         case deliveryConstants.DELIVERY_PRICE_SUCCESS:
             return {
                 ...state,
+                duration: action.duration,
                 price: action.price
             }
 
         case deliveryConstants.DELIVERY_PRICE_FAILURE:
-            return { ...state, price: 0 }
-
-
-        case deliveryConstants.DELIVERY_TRANSIT_DURATION_REQUEST:
-            return { ...state, duration: 0 }
-
-        case deliveryConstants.DELIVERY_TRANSIT_DURATION_SUCCESS:
-            return { ...state, 
-                    duration: action.duration }
-
-        case deliveryConstants.DELIVERY_TRANSIT_DURATION_FAILURE:
-            return { ...state, duration: 0 }
+            return { ...state, price: 0, duration: 0 }
 
         default:
             return state

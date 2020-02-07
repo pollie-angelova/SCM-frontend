@@ -22,8 +22,6 @@ class CalculateDeliveryPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(deliveryActions.getAvailableSources());
         this.props.dispatch(deliveryActions.getAvailableDestinations());
-        this.props.dispatch(deliveryActions.getDeliveryPrice());
-        this.props.dispatch(deliveryActions.getTransitDuration());
     }
 
     setMapReference(element) {
@@ -76,50 +74,45 @@ class CalculateDeliveryPage extends React.Component {
                 }
             });
 
-            var distanceMatrixService = new window.google.maps.DistanceMatrixService();
-            distanceMatrixService.getDistanceMatrix(
-                {
-                    origins: [source],
-                    destinations: [destination],
-                    travelMode: 'DRIVING',
-                    avoidHighways: false,
-                    avoidTolls: true,
-                }, calculateTransitDuration);
-
-            function calculateTransitDuration(response, status) {
+            const calculateTransitDuration = (response, status) => {
 
                 if (status === 'OK') {
 
-                    var origins = response.originAddresses;
-                    var destinations = response.destinationAddresses;
+                    // const origins = response.originAddresses;
+                    // const destinations = response.destinationAddresses;
 
-                    for (var i = 0; i < origins.length; i++) {
-                        var results = response.rows[i].elements;
-                        for (var j = 0; j < results.length; j++) {
-                            var element = results[j];
-                            var distance = element.distance.text;
-                            var duration = element.duration.text;
-                            var from = origins[i];
-                            var to = destinations[j];
-                        }
-                    }
+                    const { distance, duration } = response.rows[0].elements[0];
+                    this.props.dispatch(deliveryActions.getDeliveryPrice(distance.value, duration.value));
+
+
+                    // for (var i = 0; i < origins.length; i++) {
+                    //     var results = response.rows[i].elements;
+                    //     for (var j = 0; j < results.length; j++) {
+                    //         var element = results[j];
+                    //         var distance = element.distance.text;
+                    //         var duration = element.duration.text;
+                    //         var from = origins[i];
+                    //         var to = destinations[j];
+                    //     }
+                    // }
                 } else {
                     console.error(`Transit duration request failed due to ${status}`);
                 }
 
-                console.log(element.duration.value)
-                console.log(element.fare.value)
-
-                // return <div>
-                //     <h6>Transit duration: </h6>
-                //     <h6>Price: </h6>
-                //     </div>
+                // console.log(element.duration.text)
 
             }
 
+            const distanceMatrixService = new window.google.maps.DistanceMatrixService();
+            distanceMatrixService.getDistanceMatrix({
+                origins: [source],
+                destinations: [destination],
+                travelMode: 'DRIVING',
+                avoidHighways: false,
+                avoidTolls: true,
+            }, calculateTransitDuration);
+
         directionsRenderer.setMap(map);
-
-
     }
 
 }
@@ -130,6 +123,13 @@ onSourceChange(e, data) {
 
 onDestinationChange(e, data) {
     this.setState({ selectedDestination: data.value.split(',') });
+}
+
+displayPrice() {
+    return (<div>
+        <p>{Math.ceil(this.props.duration)}</p>
+        <p>{(Math.round(this.props.price * 100) / 100)}</p>
+    </div>)
 }
 
 render() {
@@ -155,6 +155,7 @@ render() {
                                     onChange={this.onDestinationChange.bind(this)}
                                     label='Destination Address:' />
                                 <Button content='Calculate' onClick={this.handleClick.bind(this)} />
+                                { this.props.price > 0 && this.props.duration>0 && this.displayPrice() }
 
 
                             </Form>
@@ -179,10 +180,17 @@ CalculateDeliveryPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-    const { availableSources, availableDestinations } = state.delivery;
+    const { 
+        price, 
+        availableSources, 
+        availableDestinations,
+        duration,
+    } = state.delivery;
     return {
         availableSources,
-        availableDestinations
+        availableDestinations,
+        price,
+        duration
     }
 }
 

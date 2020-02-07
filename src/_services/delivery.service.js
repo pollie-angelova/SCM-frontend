@@ -8,7 +8,10 @@ export const deliveryService = {
     getAvailableSources,
     getAvailableDestinations,
     getDeliveryPrice,
-    getTransitDuration
+    getAllDeliveries,
+    createNewDelivery,  
+    updateDelivery,    
+
 }
 
 async function trackDelivery(deliveryId) {
@@ -40,10 +43,35 @@ async function getAvailableDestinations() {
     ];
 }
 
-async function getDeliveryPrice() {
-    return {}
+async function getDeliveryPrice(distance, duration) {
+    const distanceInKm = distance / 1000;
+    const durationInDays = (duration / 3600) / 8;
+    const weight = 1000; // in grams
+    const margin = 3; // in local currency
+    const transitPrice = 0.0025; // price per km
+    const price = margin + (distanceInKm * (weight / 1000) * transitPrice);
+    return {
+        distance: distanceInKm,
+        duration: durationInDays,
+        price,
+    }
 }
 
-async function getTransitDuration() {
-    return {};
+async function getAllDeliveries() {
+    const delivery = await axios.get(`${CONFIG.API_BASE}/deliveries`, {
+        headers: authHeader(),
+    })
+    return delivery.data.data
+}
+
+async function createNewDelivery(newDelivery) {
+    const delivery = await axios.post(`${CONFIG.API_BASE}/deliveries`,newDelivery)
+    return delivery.data.data
+}
+
+async function updateDelivery(deliveryId) {
+    const delivery = await axios.patch(`${CONFIG.API_BASE}/deliveries/${deliveryId}`, {
+        headers: authHeader(),
+    })
+    return delivery.data.data
 }
