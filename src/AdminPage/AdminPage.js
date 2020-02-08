@@ -1,24 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Header, Page, Footer, Drivers, Vehicles, VehicleProps,DeliveryArchive,Transits } from '../_components'
-import { authActions } from '../_actions/auth.actions'
-import { Container, Input, Menu, Segment, Form, Button } from 'semantic-ui-react'
+import { Header, Page, Footer } from '../_components'
+import { NewDelivery, Drivers, Vehicles, VehicleProps, DeliveryArchive, Transits } from '.'
+import { userActions } from '../_actions';
+import { Container, Menu, Segment, } from 'semantic-ui-react'
 import './AdminPage.less'
 
 class AdminPage extends React.Component {
+
+    state = {
+        activeItem: 'new_delivery'
+    }
+
+    componentDidMount() {
+        this.props.dispatch(userActions.getAllUsers());
+        this.props.dispatch(userActions.getAvailableDrivers());
+    }
 
     onDriverChange() {
 
     }
 
-    componentDidMount() {
-        this.props.dispatch(authActions.handleToken())
-    }
-
-    state = { activeItem: 'new_delivery' }
-
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
     render() {
 
         let content;
@@ -30,28 +35,28 @@ class AdminPage extends React.Component {
                     </Segment>
                 break;
             case 'drivers':
-                content= <Segment attached='bottom'>
-                <Drivers />
-            </Segment>
-        break;
+                content = <Segment attached='bottom'>
+                    <Drivers />
+                </Segment>
+                break;
             case 'vehicles':
                 content = <Segment attached='bottom'>
-                   <Vehicles />
+                    <Vehicles />
                 </Segment>
                 break;
-                case 'vehicle_properties':
+            case 'vehicle_properties':
                 content = <Segment attached='bottom'>
-                   <VehicleProps />
+                    <VehicleProps />
                 </Segment>
                 break;
-                case 'all_deliveries':
+            case 'all_deliveries':
                 content = <Segment attached='bottom'>
-                   <DeliveryArchive />
+                    <DeliveryArchive />
                 </Segment>
                 break;
-                case 'transits':
+            case 'transits':
                 content = <Segment attached='bottom'>
-                   <Transits />
+                    <Transits />
                 </Segment>
                 break;
             default:
@@ -110,64 +115,6 @@ class AdminPage extends React.Component {
         )
     }
 }
-
-
-const NewDelivery = () => {
-
-    const availableDrivers = [
-        { key: '1', value: 'Pesho', text: 'Pesho' }, // key = id v bazata, value i text imeto
-        { key: '2', value: 'Polya', text: 'Polya' },// na shofyora
-        { key: '3', value: 'Gogo', text: 'Gogo' },
-        { key: '4', value: 'Bogo', text: 'Bogo' },
-
-    ]
-
-    return (
-        <Form>
-            <Form.Field>
-                <label>Sender</label>
-                <input placeholder='Sender' />
-            </Form.Field>
-            <Form.Field>
-                <label>Recepient</label>
-                <input placeholder='Recepient' />
-            </Form.Field>
-            <Form.Field>
-                <label>Source</label>
-                <input placeholder='Source' />
-            </Form.Field>
-            <Form.Field>
-                <label>Destination</label>
-                <input placeholder='Destination' />
-            </Form.Field>
-            <Form.Field>
-                <label>Weight</label>
-                <Input
-                    label={{ basic: true, content: 'kg' }}
-                    labelPosition='right'
-                    placeholder='Enter weight...'
-                />
-            </Form.Field>
-            <Form.Field>
-                <label>Price</label>
-                <input placeholder='Price' />
-            </Form.Field>
-            <Form.Field>
-                <label>Driver</label>
-                < Form.Dropdown placeholder='Select address'
-                    fluid
-                    selection
-                    options={availableDrivers}
-                // onChange={this.onDriverChange.bind(this)}
-                />
-            </Form.Field>
-            <Button type='add' >Add</Button>
-        </Form>
-
-    );
-}
-
-
 
 AdminPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
