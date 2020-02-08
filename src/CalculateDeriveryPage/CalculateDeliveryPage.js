@@ -74,32 +74,12 @@ class CalculateDeliveryPage extends React.Component {
             });
 
             const calculateTransitDuration = (response, status) => {
-
                 if (status === 'OK') {
-
-                    // const origins = response.originAddresses;
-                    // const destinations = response.destinationAddresses;
-
                     const { distance, duration } = response.rows[0].elements[0];
                     this.props.dispatch(deliveryActions.getDeliveryPrice(distance.value, duration.value));
-
-
-                    // for (var i = 0; i < origins.length; i++) {
-                    //     var results = response.rows[i].elements;
-                    //     for (var j = 0; j < results.length; j++) {
-                    //         var element = results[j];
-                    //         var distance = element.distance.text;
-                    //         var duration = element.duration.text;
-                    //         var from = origins[i];
-                    //         var to = destinations[j];
-                    //     }
-                    // }
                 } else {
                     console.error(`Transit duration request failed due to ${status}`);
                 }
-
-                // console.log(element.duration.text)
-
             }
 
             const distanceMatrixService = new window.google.maps.DistanceMatrixService();
@@ -125,8 +105,8 @@ onDestinationChange(e, data) {
 }
 
 displayPrice() {
-    return (<div className="price"> 
-        <br></br>
+    return (<div className="price">
+        <br />
         <p><b>Transit duration:</b> {Math.ceil(this.props.duration)} day</p>
         <p><b>Price:</b> {(Math.round(this.props.price * 100) / 100)} levs</p>
     </div>)
@@ -181,9 +161,9 @@ CalculateDeliveryPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-    const { 
-        price, 
-        availableSources, 
+    const {
+        price,
+        availableSources,
         availableDestinations,
         duration,
     } = state.delivery;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Header, Page, Footer } from '../_components'
 import { NewDelivery, Drivers, Vehicles, VehicleProps, DeliveryArchive, Transits } from '.'
-import { userActions } from '../_actions';
+import { userActions, deliveryActions } from '../_actions';
 import { Container, Menu, Segment, } from 'semantic-ui-react'
 import './AdminPage.less'
 
@@ -16,6 +16,8 @@ class AdminPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(userActions.getAllUsers());
         this.props.dispatch(userActions.getAvailableDrivers());
+        this.props.dispatch(deliveryActions.getAvailableSources());
+        this.props.dispatch(deliveryActions.getAvailableDestinations());
     }
 
     onDriverChange() {

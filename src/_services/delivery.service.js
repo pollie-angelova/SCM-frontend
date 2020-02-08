@@ -9,8 +9,8 @@ export const deliveryService = {
     getAvailableDestinations,
     getDeliveryPrice,
     getAllDeliveries,
-    createNewDelivery,  
-    updateDelivery,    
+    createNewDelivery,
+    updateDelivery,
 
 }
 
@@ -43,13 +43,13 @@ async function getAvailableDestinations() {
     ];
 }
 
-async function getDeliveryPrice(distance, duration) {
+async function getDeliveryPrice(distance, duration, weight) {
     const distanceInKm = distance / 1000;
     const durationInDays = (duration / 3600) / 8;
-    const weight = 1000; // in grams
+    const weightInKg = weight / 1000;
     const margin = 3; // in local currency
     const transitPrice = 0.0025; // price per km
-    const price = margin + (distanceInKm * (weight / 1000) * transitPrice);
+    const price = margin + (distanceInKm * weightInKg * transitPrice);
     return {
         distance: distanceInKm,
         duration: durationInDays,
