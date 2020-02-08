@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Header, Page, Footer } from '../_components'
-import { authActions } from '../_actions/auth.actions'
 import { Table, Container,Form } from 'semantic-ui-react'
 import './CorrierPage.less'
 import moment from 'moment'
@@ -28,7 +27,7 @@ for (let i = 0; i < 10; i++) {
 
 
     const statuses = [
-        { key: '1', value: 'new', text: 'new' }, 
+        { key: '1', value: 'new', text: 'new' },
         { key: '2', value: 'awaiting_pickup', text: 'awaiting pickup' },
         { key: '3', value: 'in_transit', text: 'in transit' },
         { key: '4', value: 'awaiting_devivery', text: 'awaiting devivery' },
@@ -39,7 +38,7 @@ for (let i = 0; i < 10; i++) {
 class CorrierPage extends React.Component {
 
     componentDidMount() {
-        this.props.dispatch(authActions.handleToken())
+
     }
 
     renderDelivery(delivery) {

@@ -4,12 +4,12 @@ import { CONFIG } from '../_constants'
 import { authHeader } from '../_helpers'
 
 export const userService = {
-    getUsers,
+    getAllUsers,
     getAvailableDrivers,
     getAllDrivers,
 }
 
-async function getUsers() {
+async function getAllUsers() {
     const users = await axios.get(`${CONFIG.API_BASE}/users`, {
         headers: authHeader(),
     });

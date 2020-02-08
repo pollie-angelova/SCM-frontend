@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Header, Page, Footer } from '../_components'
-import { authActions } from '../_actions/auth.actions'
 import { Table, Container, Form, Button, Grid, GridColumn } from 'semantic-ui-react'
 import './MyAccountPage.less'
 import moment from 'moment'
@@ -29,7 +28,7 @@ for (let i = 0; i < 10; i++) {
 class MyAccountPage extends React.Component {
 
     componentDidMount() {
-        this.props.dispatch(authActions.handleToken())
+
     }
 
     renderDelivery(delivery) {
