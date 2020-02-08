@@ -21,3 +21,10 @@ export const CONFIG = {
     API_BASE: process.env.REACT_APP_BASE_URL || 'http://localhost:3000',
 }
 
+export const DELIVERY_STATUSES = [
+    { value: 'new', text: 'new' },
+    { value: 'awaiting_pickup', text: 'awaiting pickup' },
+    { value: 'in_transit', text: 'in transit' },
+    { value: 'awaiting_devivery', text: 'awaiting devivery' },
+    { value: 'delivered', text: 'delivered' },
+]

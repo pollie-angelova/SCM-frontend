@@ -1,55 +1,53 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Table} from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Table, Dropdown } from 'semantic-ui-react'
 import moment from 'moment'
-
-const DELIVERIES = []
-
-const now = new Date().getTime();
-const statuses = ['new', 'delivered', 'transit'];
-const cities = ['Sofia', 'Plovdiv', 'Burgas', 'Varna', 'Stara Zagora'];
-const users = ['John Doe', 'Jane Dee', 'Rudyard Kipling', 'Brad Pitt', 'Megan Fox'];
-const drivers = ['Georgi Georgiev', 'Ivan Ivanov', 'Nikolai Nikolov', 'Anton Antonov' ];
-const vehicleIds = ['CA1234AC', 'C5255AB', 'CB9634AP', 'CA5789PP', "C9634CC", "C5555BC"]
-
-for (let i = 0; i < 10; i++) {
-    DELIVERIES.unshift({
-        id: i + 1,
-        date: now - i * 3600 * 1000,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        source: cities[Math.floor(Math.random() * cities.length)],
-        destination: cities[Math.floor(Math.random() * cities.length)],
-        recepient: users[Math.floor(Math.random() * users.length)],
-        sender: users[Math.floor(Math.random() * users.length)],
-        driver: drivers[Math.floor(Math.random() * drivers.length)],
-        reg_number:  vehicleIds[Math.floor(Math.random() * vehicleIds.length)],
-    })
-}
+import { deliveryControlActions } from '../_actions/deliverycontrol.actions'
+import { DELIVERY_STATUSES } from '../_constants'
 
 class DeliveryArchive extends React.Component {
 
+    componentDidMount() {
+        this.props.dispatch(deliveryControlActions.getAllDeliveries());
+    }
+
+    updateDelivery(e, { name, value }) {
+        const deliveryItem = this.props.deliveries.find(d => d.id === name);
+        const newHistoryItem = { name: value }
+        const updatedDelivery = {
+            history: [...deliveryItem.history, newHistoryItem]
+        }
+        this.props.dispatch(deliveryControlActions.updateDelivery(name, updatedDelivery))
+    }
 
     renderDelivery(delivery) {
+
+        const deliveryStatus = delivery.history.length
+            ? delivery.history[delivery.history.length - 1].name
+            : 'new';
+
         return (
-            <Table.Row>
-                <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
+            <Table.Row key={delivery.id}>
+                <Table.Cell>{moment(delivery.dateCreated).calendar()}</Table.Cell>
                 <Table.Cell>
-                    {delivery.source}
+                    {delivery.senderId.name}
                     <br />
-                    {delivery.sender}
+                    {delivery.source.coordinates.join(', ')}
                 </Table.Cell>
                 <Table.Cell>
-                    {delivery.destination}
+                    {delivery.recepientId.name}
                     <br />
-                    {delivery.recepient}
+                    {delivery.destination.coordinates.join(', ')}
                 </Table.Cell>
-                <Table.Cell>{delivery.driver}</Table.Cell>
-                <Table.Cell>{delivery.reg_number}</Table.Cell>
-                <Table.Cell>{delivery.status}</Table.Cell>
+                <Table.Cell>{delivery.courierId.name}</Table.Cell>
+
                 <Table.Cell>
-                    <Link to='/'>Modify</Link>
+                    <Dropdown fluid selection
+                        name={delivery.id}
+                        defaultValue={deliveryStatus}
+                        options={DELIVERY_STATUSES}
+                        onChange={this.updateDelivery.bind(this)} />
                 </Table.Cell>
             </Table.Row>
         )
@@ -57,25 +55,23 @@ class DeliveryArchive extends React.Component {
 
     render() {
         return (
-          
-                    <Table celled>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Date</Table.HeaderCell>
-                                <Table.HeaderCell>Source</Table.HeaderCell>
-                                <Table.HeaderCell>Destination</Table.HeaderCell>
-                                <Table.HeaderCell>Driver</Table.HeaderCell>
-                                <Table.HeaderCell>Registration</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                <Table.HeaderCell></Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
 
-                        <Table.Body>
-                            {DELIVERIES.map(this.renderDelivery)}
-                        </Table.Body>
-                    </Table>
-              
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>Source</Table.HeaderCell>
+                        <Table.HeaderCell>Destination</Table.HeaderCell>
+                        <Table.HeaderCell>Driver</Table.HeaderCell>
+                        <Table.HeaderCell width={3}>Status</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                    { this.props.deliveries.map(this.renderDelivery.bind(this)) }
+                </Table.Body>
+            </Table>
+
         )
     }
 }
@@ -85,9 +81,11 @@ DeliveryArchive.propTypes = {
 }
 
 function mapStateToProps(state) {
-    return {}
+    const { delivery } = state;
+    return {
+        deliveries: delivery.deliveries
+    }
 }
 
-
 const connectedDeliveryArchive = connect(mapStateToProps)(DeliveryArchive)
-export { connectedDeliveryArchive as DeliveryArchive}
+export { connectedDeliveryArchive as DeliveryArchive }

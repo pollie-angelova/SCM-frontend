@@ -87,14 +87,18 @@ class NewDelivery extends React.Component {
 
     createDelivery() {
         const { sender, recepient, driver, source, destination, weight } = this.state;
-        this.props.dispatch(deliveryControlActions.createNewDelivery({
-            sender,
-            recepient,
-            driver,
-            source,
-            destination,
+
+        const newDelivery = {
+            source: { type: 'Point', coordinates: [source[1], source[0]] }, // GeoJSON [lon, lat]
+            destination: { type: 'Point', coordinates: [destination[1], destination[0]] }, // GeoJSON [lon, lat],
+            description: new Date().toString(),
+            senderId: sender,
+            recepientId: recepient,
+            courierId: driver,
             weight,
-        }));
+        };
+
+        this.props.dispatch(deliveryControlActions.createNewDelivery(newDelivery));
     }
 
     render() {

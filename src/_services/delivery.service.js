@@ -65,12 +65,14 @@ async function getAllDeliveries() {
 }
 
 async function createNewDelivery(newDelivery) {
-    const delivery = await axios.post(`${CONFIG.API_BASE}/deliveries`,newDelivery)
+    const delivery = await axios.post(`${CONFIG.API_BASE}/deliveries`, newDelivery, {
+        headers: authHeader(),
+    })
     return delivery.data.data
 }
 
-async function updateDelivery(deliveryId) {
-    const delivery = await axios.patch(`${CONFIG.API_BASE}/deliveries/${deliveryId}`, {
+async function updateDelivery(deliveryId, updatedDelivery) {
+    const delivery = await axios.patch(`${CONFIG.API_BASE}/deliveries/${deliveryId}`, updatedDelivery, {
         headers: authHeader(),
     })
     return delivery.data.data
