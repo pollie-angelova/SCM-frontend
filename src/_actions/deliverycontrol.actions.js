@@ -1,8 +1,8 @@
-import { deliveryConstants } from '../_constants'
+import { deliveryControlConstants } from '../_constants'
 import { deliveryService } from '../_services'
 
 // export actions
-export const deliveryActions = {
+export const deliveryControlActions = {
     getAllDeliveries,
     createNewDelivery,
 }
@@ -26,9 +26,9 @@ function getAllDeliveries() {
             })
     }
 
-    function request() { return { type: deliveryConstants.ALL_DELIVERIES_REQUEST } }
-    function success(delivery) { return { type: deliveryConstants.ALL_DELIVERIES_SUCCESS, delivery } }
-    function failure(error) { return { type: deliveryConstants.ALL_DELIVERIES_FAILURE, error } }
+    function request() { return { type: deliveryControlConstants.ALL_DELIVERIES_REQUEST } }
+    function success(delivery) { return { type: deliveryControlConstants.ALL_DELIVERIES_SUCCESS, delivery } }
+    function failure(error) { return { type: deliveryControlConstants.ALL_DELIVERIES_FAILURE, error } }
 }
 
 
@@ -36,12 +36,12 @@ function getAllDeliveries() {
  * Create a new delivery
  * @return {Function}
  */
-function createNewDelivery() {
+function createNewDelivery(newDelivery) {
     return dispatch => {
         dispatch(request())
 
         // perform async operation
-        deliveryService.createNewDelivery()
+        deliveryService.createNewDelivery(newDelivery)
             .then(delivery => {
                 dispatch(success(delivery))
             })
@@ -50,8 +50,8 @@ function createNewDelivery() {
             })
     }
 
-    function request() { return { type: deliveryConstants.CREATE_NEW_DELIVERY_REQUEST } }
-    function success(delivery) { return { type: deliveryConstants.CREATE_NEW_DELIVERY_SUCCESS, delivery } }
-    function failure(error) { return { type: deliveryConstants.CREATE_NEW_DELIVERY_FAILURE, error } }
+    function request() { return { type: deliveryControlConstants.CREATE_NEW_DELIVERY_REQUEST } }
+    function success(delivery) { return { type: deliveryControlConstants.CREATE_NEW_DELIVERY_SUCCESS, delivery } }
+    function failure(error) { return { type: deliveryControlConstants.CREATE_NEW_DELIVERY_FAILURE, error } }
 }
 
