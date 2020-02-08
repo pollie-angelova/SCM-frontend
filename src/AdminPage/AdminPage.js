@@ -1,39 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Header, Page, Footer } from '../_components'
+import { Header, Page, Footer, Drivers, Vehicles, VehicleProps,DeliveryArchive,Transits } from '../_components'
 import { authActions } from '../_actions/auth.actions'
-import { Table, Container, Input, Menu, Segment, Form, Button } from 'semantic-ui-react'
+import { Container, Input, Menu, Segment, Form, Button } from 'semantic-ui-react'
 import './AdminPage.less'
-import { Link } from 'react-router-dom'
-import moment from 'moment'
-
-const DELIVERIES = []
-
-const now = new Date().getTime();
-const statuses = ['new', 'delivered', 'transit'];
-const cities = ['Sofia', 'Plovdiv', 'Burgas', 'Varna', 'Stara Zagora'];
-const users = ['John Doe', 'Jane Dee', 'Rudyard Kipling', 'Brad Pitt', 'Megan Fox'];
-const drivers = ['Georgi Georgiev', 'Ivan Ivanov', 'Nikolai Nikolov', 'Anton Antonov'];
-const vehicleIds = ['CA1234AC', 'C5255AB', 'CB9634AP', 'CA5789PP', "C9634CC", "C5555BC"]
-
-for (let i = 0; i < 10; i++) {
-    DELIVERIES.unshift({
-        id: i + 1,
-        date: now - i * 3600 * 1000,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        source: cities[Math.floor(Math.random() * cities.length)],
-        destination: cities[Math.floor(Math.random() * cities.length)],
-        recepient: users[Math.floor(Math.random() * users.length)],
-        sender: users[Math.floor(Math.random() * users.length)],
-        driver: drivers[Math.floor(Math.random() * drivers.length)],
-        reg_number: vehicleIds[Math.floor(Math.random() * vehicleIds.length)],
-    })
-}
 
 class AdminPage extends React.Component {
 
-    onDriverChange(){
+    onDriverChange() {
 
     }
 
@@ -41,36 +16,47 @@ class AdminPage extends React.Component {
         this.props.dispatch(authActions.handleToken())
     }
 
-    renderDelivery(delivery) {
-        return (
-            <Table.Row>
-                <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
-                <Table.Cell>
-                    {delivery.source}
-                    <br />
-                    {delivery.sender}
-                </Table.Cell>
-                <Table.Cell>
-                    {delivery.destination}
-                    <br />
-                    {delivery.recepient}
-                </Table.Cell>
-                <Table.Cell>{delivery.driver}</Table.Cell>
-                <Table.Cell>{delivery.reg_number}</Table.Cell>
-                <Table.Cell>{delivery.status}</Table.Cell>
-                <Table.Cell>
-                    <Link to='/'>Modify</Link>
-                </Table.Cell>
-            </Table.Row>
-        )
-    }
-
-
     state = { activeItem: 'new_delivery' }
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
     render() {
 
+        let content;
+        switch (this.state.activeItem) {
+            case 'new_delivery':
+                content =
+                    <Segment attached='bottom'>
+                        <NewDelivery />
+                    </Segment>
+                break;
+            case 'drivers':
+                content= <Segment attached='bottom'>
+                <Drivers />
+            </Segment>
+        break;
+            case 'vehicles':
+                content = <Segment attached='bottom'>
+                   <Vehicles />
+                </Segment>
+                break;
+                case 'vehicle_properties':
+                content = <Segment attached='bottom'>
+                   <VehicleProps />
+                </Segment>
+                break;
+                case 'all_deliveries':
+                content = <Segment attached='bottom'>
+                   <DeliveryArchive />
+                </Segment>
+                break;
+                case 'transits':
+                content = <Segment attached='bottom'>
+                   <Transits />
+                </Segment>
+                break;
+            default:
+                break;
+        }
         const { activeItem } = this.state
 
         return (
@@ -113,11 +99,7 @@ class AdminPage extends React.Component {
                             />
 
                         </Menu>
-
-                        <Segment attached='bottom'>
-                            <NewDelivery />
-                        </Segment>
-
+                        {content}
                     </div>
 
                 </Container>
@@ -132,13 +114,13 @@ class AdminPage extends React.Component {
 
 const NewDelivery = () => {
 
-    // const availableDrivers = [
-    //     { key: '1', value: 'Pesho', text: 'Pesho' }, // key = id v bazata, value i text imeto 
-    //     { key: '2', value: 'Polya', text: 'Polya' },// na shofyora
-    //     { key: '3', value: 'Gogo', text: 'Gogo' },
-    //     { key: '4', value: 'Bogo', text: 'Bogo' },
-     
-    //   ]
+    const availableDrivers = [
+        { key: '1', value: 'Pesho', text: 'Pesho' }, // key = id v bazata, value i text imeto
+        { key: '2', value: 'Polya', text: 'Polya' },// na shofyora
+        { key: '3', value: 'Gogo', text: 'Gogo' },
+        { key: '4', value: 'Bogo', text: 'Bogo' },
+
+    ]
 
     return (
         <Form>
@@ -170,15 +152,15 @@ const NewDelivery = () => {
                 <label>Price</label>
                 <input placeholder='Price' />
             </Form.Field>
-            {/* <Form.Field>
+            <Form.Field>
                 <label>Driver</label>
                 < Form.Dropdown placeholder='Select address'
                     fluid
                     selection
                     options={availableDrivers}
-                    // onChange={this.onDriverChange.bind(this)}
-                    />
-            </Form.Field> */}
+                // onChange={this.onDriverChange.bind(this)}
+                />
+            </Form.Field>
             <Button type='add' >Add</Button>
         </Form>
 
