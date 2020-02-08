@@ -6,7 +6,6 @@ import { Header, Page, Footer } from '../_components'
 import { MapContainer } from '../_components'
 import './CalculateDeliveryPage.less'
 import { deliveryActions } from '../_actions/delivery.actions'
-//import { deliveryConstants } from '../_constants'
 
 class CalculateDeliveryPage extends React.Component {
 
@@ -126,9 +125,10 @@ onDestinationChange(e, data) {
 }
 
 displayPrice() {
-    return (<div>
-        <p>{Math.ceil(this.props.duration)}</p>
-        <p>{(Math.round(this.props.price * 100) / 100)}</p>
+    return (<div className="price"> 
+        <br></br>
+        <p><b>Transit duration:</b> {Math.ceil(this.props.duration)} day</p>
+        <p><b>Price:</b> {(Math.round(this.props.price * 100) / 100)} levs</p>
     </div>)
 }
 
@@ -148,7 +148,7 @@ render() {
                                     options={this.availableSourcesOptions()}
                                     onChange={this.onSourceChange.bind(this)}
                                     label='Source Address:' />
-                                <Form.Dropdown placeholder='Select address'
+                               < Form.Dropdown placeholder='Select address'
                                     fluid
                                     selection
                                     options={this.availableDestinationsOptions()}
@@ -165,6 +165,7 @@ render() {
                             <div className='calculate_map'>
                                 <MapContainer mapReference={this.setMapReference.bind(this)} />
                             </div>
+                            <p className='note'>*The calculated price is for packages up to 1kg. </p>
                         </Grid.Column>
                     </Grid>
                 </Segment>
