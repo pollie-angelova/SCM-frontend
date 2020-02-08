@@ -33,7 +33,7 @@ for (let i = 0; i < 10; i++) {
 
 class AdminPage extends React.Component {
 
-    onDriverChange(){
+    onDriverChange() {
 
     }
 
@@ -132,13 +132,13 @@ class AdminPage extends React.Component {
 
 const NewDelivery = () => {
 
-    // const availableDrivers = [
-    //     { key: '1', value: 'Pesho', text: 'Pesho' }, // key = id v bazata, value i text imeto 
-    //     { key: '2', value: 'Polya', text: 'Polya' },// na shofyora
-    //     { key: '3', value: 'Gogo', text: 'Gogo' },
-    //     { key: '4', value: 'Bogo', text: 'Bogo' },
-     
-    //   ]
+    const availableDrivers = [
+        { key: '1', value: 'Pesho', text: 'Pesho' }, // key = id v bazata, value i text imeto
+        { key: '2', value: 'Polya', text: 'Polya' },// na shofyora
+        { key: '3', value: 'Gogo', text: 'Gogo' },
+        { key: '4', value: 'Bogo', text: 'Bogo' },
+
+    ]
 
     return (
         <Form>
@@ -170,15 +170,15 @@ const NewDelivery = () => {
                 <label>Price</label>
                 <input placeholder='Price' />
             </Form.Field>
-            {/* <Form.Field>
+            <Form.Field>
                 <label>Driver</label>
                 < Form.Dropdown placeholder='Select address'
                     fluid
                     selection
                     options={availableDrivers}
-                    // onChange={this.onDriverChange.bind(this)}
-                    />
-            </Form.Field> */}
+                // onChange={this.onDriverChange.bind(this)}
+                />
+            </Form.Field>
             <Button type='add' >Add</Button>
         </Form>
 
