@@ -5,45 +5,37 @@ import { Header, Page, Footer } from '../_components'
 import { Table, Container, Form, Button, Grid, GridColumn } from 'semantic-ui-react'
 import './MyAccountPage.less'
 import moment from 'moment'
-
-const DELIVERIES = []
-
-const now = new Date().getTime();
-const statuses = ['new', 'delivered', 'transit'];
-const cities = ['Sofia', 'Plovdiv', 'Burgas', 'Varna', 'Stara Zagora'];
-const users = ['John Doe', 'Jane Dee', 'Rudyard Kipling', 'Brad Pitt', 'Megan Fox'];
-
-for (let i = 0; i < 10; i++) {
-    DELIVERIES.unshift({
-        id: i + 1,
-        date: now - i * 3600 * 1000,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        source: cities[Math.floor(Math.random() * cities.length)],
-        destination: cities[Math.floor(Math.random() * cities.length)],
-        recepient: users[Math.floor(Math.random() * users.length)],
-        sender: users[Math.floor(Math.random() * users.length)],
-    })
-}
+import { DELIVERY_STATUSES } from '../_constants'
+import { deliveryControlActions } from '../_actions/deliverycontrol.actions'
 
 class MyAccountPage extends React.Component {
 
     componentDidMount() {
-
+        this.props.dispatch(deliveryControlActions.getAllDeliveries());
     }
 
     renderDelivery(delivery) {
+
+        const deliveryStatus = delivery.history.length
+            ? delivery.history[delivery.history.length - 1].name
+            : 'new';
+
+        const deliveryStatusLabel = DELIVERY_STATUSES.find(s => s.value === deliveryStatus).text;
+
         return (
-            <Table.Row>
-                <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
+            <Table.Row key={delivery.id}>
+                <Table.Cell>{moment(delivery.dateCreated).calendar()}</Table.Cell>
                 <Table.Cell>
-                    Sofia
-                </Table.Cell>
-                <Table.Cell>
-                    {delivery.destination}
+                    {delivery.senderId.name}
                     <br />
-                    {delivery.recepient}
+                    {delivery.source.coordinates.join(', ')}
                 </Table.Cell>
-                <Table.Cell>{delivery.status}</Table.Cell>
+                <Table.Cell>
+                    {delivery.recepientId.name}
+                    <br />
+                    {delivery.destination.coordinates.join(', ')}
+                </Table.Cell>
+                <Table.Cell>{deliveryStatusLabel}</Table.Cell>
             </Table.Row>
         )
     }
@@ -88,7 +80,7 @@ class MyAccountPage extends React.Component {
                         </Table.Header>
 
                         <Table.Body>
-                            {DELIVERIES.slice(0, 5).map(this.renderDelivery)}
+                            {this.props.deliveries.map(this.renderDelivery.bind(this))}
                         </Table.Body>
                     </Table>
                 </Container>
@@ -105,8 +97,10 @@ MyAccountPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-    // const { auth } = state
-    return {}
+    const { delivery } = state;
+    return {
+        deliveries: delivery.deliveries
+    }
 }
 
 
