@@ -1,4 +1,4 @@
-import { deliveryConstants } from '../_constants'
+import { deliveryConstants, deliveryControlConstants } from '../_constants'
 
 
 const initialState = {
@@ -6,7 +6,8 @@ const initialState = {
     availableSources: [],
     availableDestinations: [],
     price: 0,
-    duration: 0
+    duration: 0,
+    deliveries: [],
 }
 
 export function delivery(state = initialState, action) {
@@ -47,18 +48,57 @@ export function delivery(state = initialState, action) {
         case deliveryConstants.AVAILABLE_DESTINATIONS_FAILURE:
             return { ...state, loading: false, }
 
+        // ============================
+        // PRICE CALCULATION
+        // ============================
+
         case deliveryConstants.DELIVERY_PRICE_REQUEST:
-            return { ...state, price: 0, duration: 0 }
+            return { ...state, price: 0, duration: 0, loading: false }
 
         case deliveryConstants.DELIVERY_PRICE_SUCCESS:
             return {
                 ...state,
                 duration: action.duration,
-                price: action.price
+                price: action.price,
+                loading: false,
             }
 
         case deliveryConstants.DELIVERY_PRICE_FAILURE:
-            return { ...state, price: 0, duration: 0 }
+            return { ...state, price: 0, duration: 0, loading: false }
+
+        // ============================
+        // ALL DELIVERIES
+        // ============================
+
+        case deliveryControlConstants.ALL_DELIVERIES_REQUEST:
+            return { ...state, loading: true }
+
+        case deliveryControlConstants.ALL_DELIVERIES_SUCCESS:
+            return {
+                ...state,
+                deliveries: action.deliveries,
+                loading: false,
+            }
+
+        case deliveryControlConstants.ALL_DELIVERIES_FAILURE:
+            return { ...state, loading: false }
+
+        // ============================
+        // UPDATE DELIVERY
+        // ============================
+
+        case deliveryControlConstants.UPDATE_DELIVERY_REQUEST:
+            return { ...state, loading: true }
+
+        case deliveryControlConstants.UPDATE_DELIVERY_SUCCESS:
+            return {
+                ...state,
+                deliveries: state.deliveries.map(d => d.id === action.delivery.id ? action.delivery : d),
+                loading: false,
+            }
+
+        case deliveryControlConstants.UPDATE_DELIVERY_FAILURE:
+            return { ...state, loading: false }
 
         default:
             return state

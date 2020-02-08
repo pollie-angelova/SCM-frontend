@@ -1,68 +1,54 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Header, Page, Footer } from '../_components'
-import { Table, Container,Form } from 'semantic-ui-react'
-import './CorrierPage.less'
+import { Container, Table, Dropdown } from 'semantic-ui-react'
 import moment from 'moment'
-
-const DELIVERIES = []
-
-const now = new Date().getTime();
-const statusesArr = ['new', 'delivered', 'transit'];
-const cities = ['Sofia', 'Plovdiv', 'Burgas', 'Varna', 'Stara Zagora'];
-const users = ['John Doe', 'Jane Dee', 'Rudyard Kipling', 'Brad Pitt', 'Megan Fox'];
-
-for (let i = 0; i < 10; i++) {
-    DELIVERIES.unshift({
-        id: i + 1,
-        date: now - i * 3600 * 1000,
-        status: statusesArr[Math.floor(Math.random() * statusesArr.length)],
-        source: cities[Math.floor(Math.random() * cities.length)],
-        destination: cities[Math.floor(Math.random() * cities.length)],
-        recepient: users[Math.floor(Math.random() * users.length)],
-        sender: users[Math.floor(Math.random() * users.length)],
-    })
-}
-
-
-    const statuses = [
-        { key: '1', value: 'new', text: 'new' },
-        { key: '2', value: 'awaiting_pickup', text: 'awaiting pickup' },
-        { key: '3', value: 'in_transit', text: 'in transit' },
-        { key: '4', value: 'awaiting_devivery', text: 'awaiting devivery' },
-        {key: '5', value: 'delivered', text: 'delivered' },
-
-      ]
+import { deliveryControlActions } from '../_actions/deliverycontrol.actions'
+import { Header, Page, Footer } from '../_components'
+import { DELIVERY_STATUSES } from '../_constants'
 
 class CorrierPage extends React.Component {
 
     componentDidMount() {
+        this.props.dispatch(deliveryControlActions.getAllDeliveries());
+    }
 
+    updateDelivery(e, { name, value }) {
+        const deliveryItem = this.props.deliveries.find(d => d.id === name);
+        const newHistoryItem = { name: value }
+        const updatedDelivery = {
+            history: [...deliveryItem.history, newHistoryItem]
+        }
+        this.props.dispatch(deliveryControlActions.updateDelivery(name, updatedDelivery))
     }
 
     renderDelivery(delivery) {
+
+        const deliveryStatus = delivery.history.length
+            ? delivery.history[delivery.history.length - 1].name
+            : 'new';
+
         return (
-            <Table.Row>
-                <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
+            <Table.Row key={delivery.id}>
+                <Table.Cell>{moment(delivery.dateCreated).calendar()}</Table.Cell>
                 <Table.Cell>
-                    {delivery.source}
+                    {delivery.senderId.name}
                     <br />
-                    {delivery.sender}
+                    {delivery.source.coordinates.join(', ')}
                 </Table.Cell>
                 <Table.Cell>
-                    {delivery.destination}
+                    {delivery.recepientId.name}
                     <br />
-                    {delivery.recepient}
+                    {delivery.destination.coordinates.join(', ')}
                 </Table.Cell>
-                <Table.Cell>{delivery.status}</Table.Cell>
+                <Table.Cell>{delivery.courierId.name}</Table.Cell>
+
                 <Table.Cell>
-                < Form.Dropdown placeholder='Change Status'
-                    fluid
-                    selection
-                    options={statuses}
-                    // onChange={this.onDriverChange.bind(this)}
-                    />
+                    <Dropdown fluid selection
+                        name={delivery.id}
+                        defaultValue={deliveryStatus}
+                        options={DELIVERY_STATUSES}
+                        onChange={this.updateDelivery.bind(this)} />
                 </Table.Cell>
             </Table.Row>
         )
@@ -80,13 +66,13 @@ class CorrierPage extends React.Component {
                                 <Table.HeaderCell>Date</Table.HeaderCell>
                                 <Table.HeaderCell>Source</Table.HeaderCell>
                                 <Table.HeaderCell>Destination</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                <Table.HeaderCell></Table.HeaderCell>
+                                <Table.HeaderCell>Driver</Table.HeaderCell>
+                                <Table.HeaderCell width={3}>Status</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
 
                         <Table.Body>
-                            {DELIVERIES.map(this.renderDelivery)}
+                            {this.props.deliveries.map(this.renderDelivery.bind(this))}
                         </Table.Body>
                     </Table>
                 </Container>
@@ -96,17 +82,20 @@ class CorrierPage extends React.Component {
             </Page>
         )
     }
+
 }
+
 
 CorrierPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
-    // const { auth } = state
-    return {}
+    const { delivery } = state;
+    return {
+        deliveries: delivery.deliveries
+    }
 }
-
 
 const connectedCorrierPage = connect(mapStateToProps)(CorrierPage)
 export { connectedCorrierPage as CorrierPage }
