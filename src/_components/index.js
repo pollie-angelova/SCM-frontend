@@ -5,9 +5,5 @@ export * from './TrackOrder'
 export * from './Page'
 export * from './Map'
 export * from './MoreThanSection'
-export * from './Drivers'
-export * from './Vehicles'
-export * from './VehicleProps'
-export * from './DeliveryArchive'
-export * from './Transits'
+
 
