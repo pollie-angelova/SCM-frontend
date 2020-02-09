@@ -8,6 +8,7 @@ const initialState = {
     price: 0,
     duration: 0,
     deliveries: [],
+    transits: [],
 }
 
 export function delivery(state = initialState, action) {
@@ -98,6 +99,24 @@ export function delivery(state = initialState, action) {
             }
 
         case deliveryControlConstants.UPDATE_DELIVERY_FAILURE:
+            return { ...state, loading: false }
+
+
+        // ============================
+        // TRANSITS
+        // ============================
+
+        case deliveryControlConstants.ALL_TRANSITS_REQUEST:
+            return { ...state, loading: true }
+
+        case deliveryControlConstants.ALL_TRANSITS_SUCCESS:
+            return {
+                ...state,
+                transits: action.transits,
+                loading: false,
+            }
+
+        case deliveryControlConstants.ALL_TRANSITS_FAILURE:
             return { ...state, loading: false }
 
         default:
