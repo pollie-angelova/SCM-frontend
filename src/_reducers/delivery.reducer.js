@@ -10,6 +10,7 @@ const initialState = {
     delivery: null, // tracked delivery
     deliveries: [],
     transits: [],
+    deliveryCreatedSuccessfully: false,
 }
 
 export function delivery(state = initialState, action) {
@@ -32,6 +33,41 @@ export function delivery(state = initialState, action) {
 
         case deliveryConstants.TRACK_FAILURE:
             return { ...state, loading: false, }
+
+
+        // ============================
+        // CREATE DELIVERY
+        // ============================
+
+        case deliveryControlConstants.CREATE_NEW_DELIVERY_REQUEST:
+            return {
+                ...state,
+                deliveryCreatedSuccessfully: false,
+                loading: true,
+            }
+
+        case deliveryControlConstants.CREATE_NEW_DELIVERY_SUCCESS:
+            return {
+                ...state,
+                deliveryCreatedSuccessfully: true,
+                loading: false,
+            }
+
+        case deliveryControlConstants.CREATE_NEW_DELIVERY_FAILURE:
+            return {
+                ...state,
+                deliveryCreatedSuccessfully: false,
+                loading: false,
+            }
+
+        case deliveryControlConstants.CLEAR:
+            return {
+                ...state,
+                deliveryCreatedSuccessfully: false,
+                price: 0,
+                duration: 0,
+                loading: false,
+            }
 
         // ============================
         // SOURCES

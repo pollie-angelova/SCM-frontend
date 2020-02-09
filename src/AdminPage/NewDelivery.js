@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Input, Form, Button } from 'semantic-ui-react'
+import { Input, Form, Button, Message } from 'semantic-ui-react'
 import { deliveryActions } from '../_actions/delivery.actions';
 import { getGoogleMaps } from '../_helpers';
 import { deliveryControlActions } from '../_actions/deliverycontrol.actions';
@@ -18,6 +18,10 @@ class NewDelivery extends React.Component {
 
     componentDidMount() {
         getGoogleMaps();
+    }
+
+    componentWillUnmount() {
+        this.props.dispatch(deliveryControlActions.clear());
     }
 
     availableDrivers = () => this.props.availableDrivers.map(driver => ({
@@ -99,21 +103,36 @@ class NewDelivery extends React.Component {
         };
 
         this.props.dispatch(deliveryControlActions.createNewDelivery(newDelivery));
+        this.props.dispatch(deliveryControlActions.clear());
+
+        this.setState({
+            sender: null,
+            recepient: null,
+            driver: null,
+            source: null,
+            destination: null,
+            weight: 0,
+        })
     }
 
     render() {
 
         return (
             <Form>
+
+                {this.props.creteStatus && <Message positive>Delivery created successfully</Message>}
+
                 <Form.Group widths='equal'>
                     <Form.Dropdown fluid selection
                         label='Sender'
                         placeholder='Select sender'
+                        value={this.state.sender}
                         options={this.availableUsers()}
                         onChange={(e, { value }) => this.setState({ sender: value })} />
                     <Form.Dropdown fluid selection
                         label='Recepient'
                         placeholder='Select recepient'
+                        value={this.state.recepient}
                         options={this.availableUsers()}
                         onChange={(e, { value }) => this.setState({ recepient: value })} />
                 </Form.Group>
@@ -122,12 +141,14 @@ class NewDelivery extends React.Component {
                         label='Source'
                         name='source'
                         placeholder='Select source'
+                        value={this.state.source ? this.state.source.join(',') : null}
                         options={this.availableSources()}
                         onChange={this.onLocationChange.bind(this)} />
                     <Form.Dropdown fluid selection
                         label='Destination'
                         name='destination'
                         placeholder='Select destination'
+                        value={this.state.destination ? this.state.destination.join(',') : null}
                         options={this.availableDestinations()}
                         onChange={this.onLocationChange.bind(this)} />
                 </Form.Group>
@@ -137,6 +158,7 @@ class NewDelivery extends React.Component {
                         label={{ basic: true, content: 'kg' }}
                         labelPosition='right'
                         placeholder='Enter weight...'
+                        value={this.state.weight}
                         onChange={(e, { value }) => this.setState({ weight: value })} />
                 </Form.Field>
                 <Form.Group widths='equal'>
@@ -147,6 +169,7 @@ class NewDelivery extends React.Component {
                     <Form.Dropdown fluid selection
                         label='Driver'
                         placeholder='Select driver'
+                        value={this.state.driver}
                         options={this.availableDrivers()}
                         onChange={(e, { value }) => this.setState({ driver: value })} />
                 </Form.Field>
@@ -177,6 +200,7 @@ function mapStateToProps(state) {
         availableDestinations: delivery.availableDestinations,
         price: delivery.price,
         duration: delivery.duration,
+        creteStatus: delivery.deliveryCreatedSuccessfully,
     }
 }
 

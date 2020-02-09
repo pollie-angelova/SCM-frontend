@@ -7,6 +7,7 @@ export const deliveryControlActions = {
     createNewDelivery,
     updateDelivery,
     getAllTransits,
+    clear,
 }
 
 
@@ -102,4 +103,8 @@ function getAllTransits() {
     function request() { return { type: deliveryControlConstants.ALL_TRANSITS_REQUEST } }
     function success(transits) { return { type: deliveryControlConstants.ALL_TRANSITS_SUCCESS, transits } }
     function failure(error) { return { type: deliveryControlConstants.ALL_TRANSITS_FAILURE, error } }
+}
+
+function clear() {
+    return { type: deliveryControlConstants.CLEAR }
 }
