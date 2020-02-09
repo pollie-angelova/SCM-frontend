@@ -15,10 +15,8 @@ class Transits extends React.Component {
 
         const legs = transit.legs.map((leg, i) => {
             return (<List.Item key={i} icon='linkify'>
-                <List>
-                    <List.Item>{leg.startAddress}</List.Item>
-                    <List.Item>{leg.endAddress}</List.Item>
-                </List>
+                { i === 0 &&  <div>{leg.startAddress}<br />|<br />{ leg.endAddress }</div> }
+                { i !== 0 && <div>|<br />{leg.endAddress}</div>}
             </List.Item>)
         })
 

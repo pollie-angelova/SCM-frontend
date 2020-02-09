@@ -80,7 +80,7 @@ class MyAccountPage extends React.Component {
                         </Table.Header>
 
                         <Table.Body>
-                            {this.props.deliveries.map(this.renderDelivery.bind(this))}
+                            {this.props.deliveries.reverse().slice(0, 5).reverse().map(this.renderDelivery.bind(this))}
                         </Table.Body>
                     </Table>
                 </Container>
