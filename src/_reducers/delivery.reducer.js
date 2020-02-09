@@ -7,6 +7,7 @@ const initialState = {
     availableDestinations: [],
     price: 0,
     duration: 0,
+    delivery: null, // tracked delivery
     deliveries: [],
     transits: [],
 }
@@ -14,6 +15,23 @@ const initialState = {
 export function delivery(state = initialState, action) {
 
     switch (action.type) {
+
+        // ============================
+        // TRACK
+        // ============================
+
+        case deliveryConstants.TRACK_REQUEST:
+            return { ...state, loading: true, }
+
+        case deliveryConstants.TRACK_SUCCESS:
+            return {
+                ...state,
+                delivery: action.delivery,
+                loading: false,
+            }
+
+        case deliveryConstants.TRACK_FAILURE:
+            return { ...state, loading: false, }
 
         // ============================
         // SOURCES
