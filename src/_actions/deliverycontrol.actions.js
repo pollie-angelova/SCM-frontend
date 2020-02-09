@@ -6,6 +6,7 @@ export const deliveryControlActions = {
     getAllDeliveries,
     createNewDelivery,
     updateDelivery,
+    getAllTransits,
 }
 
 
@@ -78,4 +79,27 @@ function updateDelivery(deliveryId, updatedDelivery) {
     function request() { return { type: deliveryControlConstants.UPDATE_DELIVERY_REQUEST } }
     function success(delivery) { return { type: deliveryControlConstants.UPDATE_DELIVERY_SUCCESS, delivery } }
     function failure(error) { return { type: deliveryControlConstants.UPDATE_DELIVERY_FAILURE, error } }
+}
+
+/**
+ * Get all transits
+ * @return {Function}
+ */
+function getAllTransits() {
+    return dispatch => {
+        dispatch(request())
+
+        // perform async operation
+        deliveryService.getAllTransits()
+            .then(transits => {
+                dispatch(success(transits))
+            })
+            .catch(error => {
+                dispatch(failure(error))
+            })
+    }
+
+    function request() { return { type: deliveryControlConstants.ALL_TRANSITS_REQUEST } }
+    function success(transits) { return { type: deliveryControlConstants.ALL_TRANSITS_SUCCESS, transits } }
+    function failure(error) { return { type: deliveryControlConstants.ALL_TRANSITS_FAILURE, error } }
 }

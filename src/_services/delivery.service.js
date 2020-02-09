@@ -11,7 +11,7 @@ export const deliveryService = {
     getAllDeliveries,
     createNewDelivery,
     updateDelivery,
-
+    getAllTransits,
 }
 
 async function trackDelivery(deliveryId) {
@@ -73,6 +73,13 @@ async function createNewDelivery(newDelivery) {
 
 async function updateDelivery(deliveryId, updatedDelivery) {
     const delivery = await axios.patch(`${CONFIG.API_BASE}/deliveries/${deliveryId}`, updatedDelivery, {
+        headers: authHeader(),
+    })
+    return delivery.data.data
+}
+
+async function getAllTransits() {
+    const delivery = await axios.get(`${CONFIG.API_BASE}/transits`, {
         headers: authHeader(),
     })
     return delivery.data.data

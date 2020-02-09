@@ -1,81 +1,58 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Table} from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Table, List } from 'semantic-ui-react'
 import moment from 'moment'
-
-const TRANSITS = []
-
-const now = new Date().getTime();
-const statuses = ['new', 'delivered', 'transit'];
-const cities = ['Sofia', 'Plovdiv', 'Burgas', 'Varna', 'Stara Zagora'];
-const users = ['John Doe', 'Jane Dee', 'Rudyard Kipling', 'Brad Pitt', 'Megan Fox'];
-const drivers = ['Georgi Georgiev', 'Ivan Ivanov', 'Nikolai Nikolov', 'Anton Antonov' ];
-const vehicleIds = ['CA1234AC', 'C5255AB', 'CB9634AP', 'CA5789PP', "C9634CC", "C5555BC"]
-
-for (let i = 0; i < 10; i++) {
-    TRANSITS.unshift({
-        id: i + 1,
-        date: now - i * 3600 * 1000,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        source: cities[Math.floor(Math.random() * cities.length)],
-        destination: cities[Math.floor(Math.random() * cities.length)],
-        recepient: users[Math.floor(Math.random() * users.length)],
-        sender: users[Math.floor(Math.random() * users.length)],
-        driver: drivers[Math.floor(Math.random() * drivers.length)],
-        reg_number:  vehicleIds[Math.floor(Math.random() * vehicleIds.length)],
-    })
-}
+import { deliveryControlActions } from '../_actions/deliverycontrol.actions'
 
 class Transits extends React.Component {
 
+    componentDidMount() {
+        this.props.dispatch(deliveryControlActions.getAllTransits());
+    }
 
-    renderDelivery(delivery) {
+    renderTransit(transit) {
+
+        const legs = transit.legs.map((leg, i) => {
+            return (<List.Item key={i} icon='linkify'>
+                <List>
+                    <List.Item>{leg.startAddress}</List.Item>
+                    <List.Item>{leg.endAddress}</List.Item>
+                </List>
+            </List.Item>)
+        })
+
         return (
-            <Table.Row>
-                <Table.Cell>{moment(delivery.date).calendar()}</Table.Cell>
+            <Table.Row key={transit.id}>
+                <Table.Cell>{moment(transit.dateCreated).calendar()}</Table.Cell>
                 <Table.Cell>
-                    {delivery.source}
-                    <br />
-                    {delivery.sender}
+                    <List>
+
+                    </List>
+                    { legs }
                 </Table.Cell>
-                <Table.Cell>
-                    {delivery.destination}
-                    <br />
-                    {delivery.recepient}
-                </Table.Cell>
-                <Table.Cell>{delivery.driver}</Table.Cell>
-                <Table.Cell>{delivery.reg_number}</Table.Cell>
-                <Table.Cell>{delivery.status}</Table.Cell>
-                <Table.Cell>
-                    <Link to='/'>Modify</Link>
-                </Table.Cell>
+                <Table.Cell>{ transit.courierId.name }</Table.Cell>
             </Table.Row>
         )
     }
 
     render() {
         return (
-          
-                    <Table celled>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Date</Table.HeaderCell>
-                                <Table.HeaderCell>Source</Table.HeaderCell>
-                                <Table.HeaderCell>Destination</Table.HeaderCell>
-                                <Table.HeaderCell>Driver</Table.HeaderCell>
-                                <Table.HeaderCell>Registration</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                <Table.HeaderCell></Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
 
-                        <Table.Body>
-                            {TRANSITS.map(this.renderDelivery)}
-                        </Table.Body>
-                    </Table>
-              
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>Transit</Table.HeaderCell>
+                        <Table.HeaderCell>Driver</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                    { this.props.transits.map(this.renderTransit.bind(this)) }
+                </Table.Body>
+            </Table>
+
         )
     }
 }
@@ -85,9 +62,12 @@ Transits.propTypes = {
 }
 
 function mapStateToProps(state) {
-    return {}
+    const { delivery } = state
+    return {
+        transits: delivery.transits
+    }
 }
 
 
 const connectedTransits = connect(mapStateToProps)(Transits)
-export { connectedTransits as Transits}
+export { connectedTransits as Transits }
