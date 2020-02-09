@@ -30,6 +30,7 @@ class DeliveryArchive extends React.Component {
         return (
             <Table.Row key={delivery.id}>
                 <Table.Cell>{moment(delivery.dateCreated).calendar()}</Table.Cell>
+                <Table.Cell>{delivery.id}</Table.Cell>
                 <Table.Cell>
                     {delivery.senderId.name}
                     <br />
@@ -60,6 +61,7 @@ class DeliveryArchive extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>ID</Table.HeaderCell>
                         <Table.HeaderCell>Source</Table.HeaderCell>
                         <Table.HeaderCell>Destination</Table.HeaderCell>
                         <Table.HeaderCell>Driver</Table.HeaderCell>
