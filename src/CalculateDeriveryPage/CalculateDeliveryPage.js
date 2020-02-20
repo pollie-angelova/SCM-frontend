@@ -127,13 +127,13 @@ render() {
                                     selection
                                     options={this.availableSourcesOptions()}
                                     onChange={this.onSourceChange.bind(this)}
-                                    label='Source Address:' />
+                                    label='Source Office:' />
                                < Form.Dropdown placeholder='Select address'
                                     fluid
                                     selection
                                     options={this.availableDestinationsOptions()}
                                     onChange={this.onDestinationChange.bind(this)}
-                                    label='Destination Address:' />
+                                    label='Destination Office:' />
                                 <Button content='Calculate' onClick={this.handleClick.bind(this)} />
                                 { this.props.price > 0 && this.props.duration>0 && this.displayPrice() }
 
